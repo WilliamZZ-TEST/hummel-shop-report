@@ -309,4 +309,100 @@
   })();
 
   console.log('All 10 hummel charts initialized.');
+
+  // ============= Chart 11: 月度退款金额 + 退款率 (双轴) =============
+  (function() {
+    var el = document.getElementById('chart-refund-trend');
+    if (!el) return;
+    var chart = echarts.init(el);
+    var x = ['2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];
+    var pay = [351517.78, 129612.45, 108450.32, 110688.94, 79705.63, 66038.89];
+    var refund = [184857.95, 109573.12, 67530.23, 71119.59, 57579.22, 48025.92];
+    var rate = [52.59, 84.54, 62.27, 64.25, 72.24, 72.72];
+    chart.setOption({
+      backgroundColor: canvas,
+      grid: { left: '6%', right: '6%', top: 80, bottom: 60 },
+      legend: { data: ['支付金额', '成功退款金额', '退款率'], top: 10, textStyle: { color: ink } },
+      title: { text: '注：退款率 = 成功退款金额 / 当月支付金额', left: 'center', top: 38, textStyle: { fontSize: 12, color: stone, fontWeight: 'normal' } },
+      xAxis: { type: 'category', data: x, axisLabel: { color: stone }, axisLine: { lineStyle: { color: ink15 } } },
+      yAxis: [
+        { type: 'value', name: '金额（元）', nameTextStyle: { color: stone }, axisLabel: { color: stone, formatter: function(v){ return (v/10000).toFixed(0) + '万'; } }, splitLine: { lineStyle: { color: ink15 } } },
+        { type: 'value', name: '退款率（%）', nameTextStyle: { color: stone }, max: 100, axisLabel: { color: stone, formatter: '{value}%' }, splitLine: { show: false } }
+      ],
+      series: [
+        { name: '支付金额', type: 'bar', yAxisIndex: 0, data: pay, itemStyle: { color: ink + '44' }, barWidth: '40%' },
+        { name: '成功退款金额', type: 'bar', yAxisIndex: 0, data: refund, itemStyle: { color: accent + 'cc' }, barWidth: '40%' },
+        { name: '退款率', type: 'line', yAxisIndex: 1, smooth: true, data: rate, lineStyle: { color: '#d97706', width: 3 }, itemStyle: { color: '#d97706' }, symbol: 'circle', symbolSize: 10, markLine: { silent: true, data: [{ yAxis: 15, name: '行业健康线', label: { formatter: '行业健康线 15%', color: stone, fontSize: 11 }, lineStyle: { color: '#2ecc71', type: 'dashed' } }] } }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  })();
+
+  // ============= Chart 12: 商品维度退款分布 (散点图) =============
+  (function() {
+    var el = document.getElementById('chart-refund-distribution');
+    if (!el) return;
+    var chart = echarts.init(el);
+    // 真实 22 个有销售/退款的商品（来源：商品整体效果月报_20260701.xlsx）
+    var products = [
+      { name: 'HUMMEL冰丝T恤', pay: 338, refund: 0, rate: 0.00, cat: '男装' },
+      { name: 'HUMMEL休闲裤-SKU1', pay: 341, refund: 598, rate: 175.14, cat: '男装' },
+      { name: 'HUMMEL三合一外套-SKU1', pay: 519, refund: 519, rate: 100.00, cat: '男装' },
+      { name: 'hummel德训鞋-SKU1', pay: 739, refund: 355, rate: 48.03, cat: '运动鞋' },
+      { name: 'hummel足球鞋-SKU1', pay: 1172, refund: 0, rate: 0.00, cat: '运动鞋' },
+      { name: 'HUMMEL速干长裤-SKU1', pay: 638, refund: 638, rate: 100.00, cat: '男装' },
+      { name: 'HUMMEL松紧腰休闲裤', pay: 373, refund: 0, rate: 0.00, cat: '男装' },
+      { name: 'HUMMEL休闲裤-SKU2', pay: 1189, refund: 890, rate: 74.85, cat: '男装' },
+      { name: 'hummel德训鞋-SKU2', pay: 369, refund: 0, rate: 0.00, cat: '运动鞋' },
+      { name: 'hummel足球鞋-SKU2', pay: 287, refund: 683, rate: 237.94, cat: '运动鞋' },
+      { name: 'HUMMEL速干长裤-SKU2', pay: 261, refund: 261, rate: 100.00, cat: '男装' },
+      { name: 'HUMMEL冰丝T恤-SKU2', pay: 169, refund: 0, rate: 0.00, cat: '男装' },
+      { name: 'HUMMEL休闲裤-SKU3', pay: 2854, refund: 2211, rate: 77.45, cat: '男装' },
+      { name: 'HUMMEL工装裤', pay: 266, refund: 266, rate: 100.00, cat: '男装' },
+      { name: 'hummel足球鞋-SKU3', pay: 861, refund: 287, rate: 33.33, cat: '运动鞋' },
+      { name: 'HUMMEL休闲裤-SKU4', pay: 0, refund: 299, rate: 0.00, cat: '男装' },
+      { name: 'hummel德训鞋-SKU3', pay: 1182, refund: 798, rate: 67.51, cat: '运动鞋' },
+      { name: 'hummel足球鞋-SKU4', pay: 299, refund: 0, rate: 0.00, cat: '运动鞋' },
+      { name: 'HUMMEL休闲裤-SKU5', pay: 299, refund: 0, rate: 0.00, cat: '男装' },
+      { name: 'hummel德训鞋-SKU4', pay: 378, refund: 0, rate: 0.00, cat: '运动鞋' },
+      { name: 'hummel足球鞋-SKU5', pay: 396, refund: 0, rate: 0.00, cat: '运动鞋' },
+      { name: 'HUMMEL三合一外套-SKU2', pay: 518, refund: 0, rate: 0.00, cat: '男装' }
+    ];
+
+    // 散点数据 [pay_amount, refund_rate, name, refund_amount, category]
+    var data = products.map(function(p) {
+      return {
+        name: p.name,
+        value: [p.pay, p.rate, p.name, p.refund, p.cat],
+        symbolSize: Math.max(8, Math.min(50, Math.sqrt(p.pay + p.refund) * 1.2 + 6))
+      };
+    });
+
+    chart.setOption({
+      backgroundColor: canvas,
+      grid: { left: '6%', right: '6%', top: 100, bottom: 80 },
+      legend: { data: ['男装', '运动鞋'], top: 10, textStyle: { color: ink } },
+      title: { text: '点大小 = √(支付+退款)；颜色 = 类目；Y轴 = 退款率（>100% 表示历史累计退款 > 本月销售）', left: 'center', top: 38, textStyle: { fontSize: 12, color: stone, fontWeight: 'normal' } },
+      tooltip: {
+        trigger: 'item',
+        formatter: function(p) {
+          var d = p.data.value;
+          return '<strong>' + d[2] + '</strong> [' + d[4] + ']<br>' +
+                 '支付: ¥' + d[0].toLocaleString() + '<br>' +
+                 '退款: ¥' + d[3].toLocaleString() + '<br>' +
+                 '退款率: ' + d[1].toFixed(2) + '%';
+        }
+      },
+      xAxis: { type: 'value', name: '支付金额（元）', nameTextStyle: { color: stone }, axisLabel: { color: stone, formatter: function(v){ return '¥' + v.toLocaleString(); } }, splitLine: { lineStyle: { color: ink15 } } },
+      yAxis: { type: 'value', name: '退款率（%）', nameTextStyle: { color: stone }, max: 260, axisLabel: { color: stone, formatter: '{value}%' }, splitLine: { lineStyle: { color: ink15 } } },
+      series: [
+        { name: '男装', type: 'scatter', data: data.filter(function(d){ return d.value[4] === '男装'; }).map(function(d){ return { name: d.name, value: d.value, symbolSize: d.symbolSize }; }), itemStyle: { color: accent, opacity: 0.75, borderColor: ink, borderWidth: 1 } },
+        { name: '运动鞋', type: 'scatter', data: data.filter(function(d){ return d.value[4] === '运动鞋'; }).map(function(d){ return { name: d.name, value: d.value, symbolSize: d.symbolSize }; }), itemStyle: { color: secondary, opacity: 0.75, borderColor: ink, borderWidth: 1 } },
+        { name: '行业健康线', type: 'line', data: [], markLine: { silent: true, data: [{ yAxis: 15, name: '行业健康线', label: { formatter: '行业健康线 15%', color: stone, fontSize: 11 }, lineStyle: { color: '#2ecc71', type: 'dashed' } }], symbol: 'none' } }
+      ]
+    });
+    window.addEventListener('resize', function(){ chart.resize(); });
+  })();
+
+  console.log('All 12 hummel charts initialized (incl. refund analysis).');
 })();
