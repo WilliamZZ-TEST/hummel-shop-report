@@ -29,6 +29,15 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: var(--font-body); background: var(--canvas); color: var(--ink); line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased; }
 
+/* ===== 吸顶导航栏 ===== */
+.sticky-nav { position: sticky; top: 0; z-index: 100; background: rgba(250, 249, 245, 0.92); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px); border-bottom: 1px solid var(--ink-08); padding: 14px clamp(24px, 5vw, 80px); display: flex; gap: 8px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+.sticky-nav::-webkit-scrollbar { display: none; }
+.sticky-nav .nav-brand { font-family: var(--font-display); font-size: 1.1rem; color: var(--accent); margin-right: 24px; white-space: nowrap; }
+.sticky-nav a { color: var(--stone); text-decoration: none; font-size: 0.875rem; font-weight: 500; padding: 6px 14px; border-radius: 20px; white-space: nowrap; transition: all 0.2s ease; border: 1px solid transparent; }
+.sticky-nav a:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-glow); }
+.sticky-nav a.active { color: var(--accent); border-color: var(--accent); background: var(--accent-glow); }
+.sticky-nav a.new-tag::after { content: "NEW"; font-size: 0.625rem; color: var(--accent); background: var(--accent-glow); padding: 1px 6px; border-radius: 8px; margin-left: 6px; font-weight: 600; vertical-align: middle; }
+
 .hero { padding: clamp(80px, 12vh, 140px) clamp(24px, 5vw, 80px) clamp(64px, 8vh, 96px); text-align: center; max-width: 1280px; margin: 0 auto; }
 .hero .brand { font-family: var(--font-body); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
 .hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); max-width: 800px; margin: 0 auto 16px; animation: heroReveal 0.8s var(--ease-out-expo) both; }
@@ -148,6 +157,19 @@ footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; 
 </head>
 <body>
 
+<nav class="sticky-nav" id="stickyNav">
+  <span class="nav-brand">Hummel · 2026.06</span>
+  <a href="#sec-summary">执行摘要</a>
+  <a href="#sec-core">核心指标</a>
+  <a href="#sec-traffic">流量来源</a>
+  <a href="#sec-product">商品矩阵</a>
+  <a href="#sec-audience">用户画像</a>
+  <a href="#sec-refund" class="new-tag">退款与售后</a>
+  <a href="#sec-decision">关键决策</a>
+  <a href="#sec-swot">SWOT</a>
+  <a href="#sec-roadmap">90天路线</a>
+</nav>
+
 <header class="hero">
   <div class="brand">hummel 旗舰店</div>
   <h1>深度经营诊断报告</h1>
@@ -167,7 +189,7 @@ footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; 
 </div>
 
 <section>
-  <div class="section-header"><div class="num">Executive Summary</div><h2>执行摘要</h2></div>
+  <div class="section-header" id="sec-summary"><div class="num">Executive Summary</div><h2>执行摘要</h2></div>
   <div class="reveal">
     <p style="max-width:65ch;font-size:1.05rem;line-height:1.7;color:var(--ink);">
       Hummel天猫旗舰店在2026年上半年经历了<strong>剧烈且持续的业绩下滑</strong>。从1月峰值（访客81,516人，支付金额&yen;351,518，支付买家1,406人）到6月仅剩访客26,386人，支付金额&yen;66,039，支付买家157人——<strong style="color:var(--accent);">核心指标全面萎缩，降幅达67%-89%</strong>。
@@ -188,7 +210,7 @@ footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; 
 </section>
 
 <section>
-  <div class="section-header"><div class="num">Section 01</div><h2>店铺经营核心指标分析</h2></div>
+  <div class="section-header" id="sec-core"><div class="num">Section 01</div><h2>店铺经营核心指标分析</h2></div>
   <div class="reveal"><h3 style="font-family:var(--font-display);font-size:1.3rem;font-weight:400;letter-spacing:-0.005em;margin-bottom:24px;">1.1 访客与收入趋势</h3></div>
   <figure class="chart-figure reveal"><figcaption>图1：2026年1–6月访客数与支付金额变化趋势</figcaption><div id="chart-visitors-revenue" style="width:100%;min-height:400px"></div></figure>
   <figure class="chart-figure reveal"><figcaption>图2：支付转化率与UV价值变化</figcaption><div id="chart-conv-uv" style="width:100%;min-height:400px"></div></figure>
@@ -203,7 +225,7 @@ footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; 
 </section>
 
 <section>
-  <div class="section-header"><div class="num">Section 02</div><h2>店铺流量来源深度分析</h2></div>
+  <div class="section-header" id="sec-traffic"><div class="num">Section 02</div><h2>店铺流量来源深度分析</h2></div>
   <figure class="chart-figure reveal"><figcaption>图5：6月各流量来源访客数与支付金额对比</figcaption><div id="chart-traffic-source" style="width:100%;min-height:400px"></div></figure>
   <div class="table-wrap reveal">
     <table><thead><tr><th>来源渠道</th><th>访客数</th><th>占比</th><th>支付金额</th><th>支付买家</th><th>UV价值</th><th>诊断</th></tr></thead><tbody>
@@ -226,7 +248,7 @@ footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; 
 </section>
 
 <section>
-  <div class="section-header"><div class="num">Section 03</div><h2>商品效果与产品矩阵分析</h2></div>
+  <div class="section-header" id="sec-product"><div class="num">Section 03</div><h2>商品效果与产品矩阵分析</h2></div>
   <figure class="chart-figure reveal"><figcaption>图7：6月各商品访客数、支付金额、转化率、跳出率四维对比</figcaption><div id="chart-product-perf" style="width:100%;min-height:450px"></div></figure>
   <div class="table-wrap reveal">
     <table><thead><tr><th>商品</th><th>访客</th><th>支付金额</th><th>买家</th><th>转化率</th><th>跳出率</th><th>UV价值</th><th>诊断</th></tr></thead><tbody>
@@ -251,7 +273,7 @@ footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; 
 </section>
 
 <section>
-  <div class="section-header"><div class="num">Section 04</div><h2>人群与用户画像分析</h2></div>
+  <div class="section-header" id="sec-audience"><div class="num">Section 04</div><h2>人群与用户画像分析</h2></div>
   <div class="chart-grid reveal">
     <figure class="chart-figure"><figcaption>图9：新老访客占比趋势（6个月）</figcaption><div id="chart-new-old" style="width:100%;min-height:400px"></div></figure>
     <figure class="chart-figure"><figcaption>图10：6月人群类型分布（访客维度）</figcaption><div id="chart-customer-type" style="width:100%;min-height:400px"></div></figure>
@@ -272,8 +294,71 @@ footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; 
   <div class="section-summary reveal" data-label="一句话总结">99%新客占比意味着店铺没有复购发动机，会员体系为零、粉丝运营失效——用户资产几乎为零，这是最致命的结构性缺陷。</div>
 </section>
 
+<section id="sec-refund">
+  <div class="section-header"><div class="num">Section 05</div><h2>退款与售后分析</h2></div>
+  <p style="color:var(--stone);max-width:65ch;margin-bottom:32px;" class="reveal">基于"店铺经营核心月报"中的"成功退款金额"与"商品整体效果月报"中商品维度的"成功退款金额"——本节揭示店铺退款规模、退款率走势、以及具体问题商品。</p>
+
+  <div class="insight-grid">
+    <div class="insight-box reveal">
+      <h4>核心警示</h4>
+      <ul>
+        <li>6月成功退款<strong style="color:var(--accent);">¥48,026</strong>，占当月支付<strong style="color:var(--accent);">72.72%</strong>——意味着<strong>每收1元就被退0.73元</strong></li>
+        <li>2月退款率峰值<strong>84.54%</strong>（当月支付 ¥129,612 / 退款 ¥109,573）</li>
+        <li>22个有销售商品中，<strong style="color:var(--accent);">12个（55%）</strong>出现退款</li>
+        <li>2个商品退款率<strong style="color:var(--accent);">超过100%</strong>（历史累计退款超过本月销售）</li>
+      </ul>
+    </div>
+    <div class="insight-box reveal">
+      <h4>退款率口径说明</h4>
+      <ul>
+        <li><strong>退款金额 / 当月支付金额</strong>：本报告采用</li>
+        <li>分子：天猫"成功退款金额"（含仅退款+退货退款，跨月累计）</li>
+        <li>分母：当期销售支付金额</li>
+        <li>注：>100% 表示<strong>当月发生的退款来自历史订单</strong>，属正常现象但反映<strong>历史销售质量隐患</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-top:48px;font-family:var(--font-display);font-size:1.5rem;" class="reveal">5.1 月度退款金额与退款率走势</h3>
+  <p class="figure-caption reveal">图11：2026年1-6月成功退款金额与退款率变化</p>
+  <div class="chart-box reveal" id="chart-refund-trend" style="width:100%;min-height:420px;"></div>
+  <div class="data-table reveal">
+    <table>
+      <thead><tr><th>月份</th><th>支付金额</th><th>成功退款金额</th><th>退款率</th></tr></thead>
+      <tbody id="refund-trend-tbody"></tbody>
+    </table>
+  </div>
+
+  <h3 style="margin-top:64px;font-family:var(--font-display);font-size:1.5rem;" class="reveal">5.2 商品维度退款分布</h3>
+  <p class="figure-caption reveal">图12：22个有销售商品的退款率分布（散点图）</p>
+  <div class="chart-box reveal" id="chart-refund-distribution" style="width:100%;min-height:480px;"></div>
+  <div class="insight-grid" style="margin-top:32px;">
+    <div class="insight-box reveal">
+      <h4>高退款率商品（&gt;75%）</h4>
+      <ul>
+        <li>足球风盖盖鞋（某SKU）退款率 <strong style="color:var(--accent);">237.94%</strong></li>
+        <li>休闲裤（部分SKU）退款率 <strong>175.14%</strong></li>
+        <li>梭织速干长裤 / 三合一外套 退款率 <strong>100%</strong></li>
+        <li>休闲裤（主要SKU）平均退款率 <strong>75%</strong></li>
+      </ul>
+    </div>
+    <div class="insight-box reveal">
+      <h4>问题归因（需进一步排查）</h4>
+      <ul>
+        <li><strong>尺码/版型问题</strong>：裤装类退款率普遍偏高，详情页尺码表可能不准</li>
+        <li><strong>商品描述不符</strong>：&gt;100% 退款率说明用户收到货后退货比例异常</li>
+        <li><strong>品控风险</strong>：高单价商品（&yen;300+）出现全单退款需排查质量</li>
+        <li><strong>详情页转化</strong>：高跳失率（&gt;60%）商品退款率也偏高</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-red reveal"><strong>关键警示</strong>当退款率长期高于 50% 时，意味着店铺在 <strong>"支付-发货-签收-满意"漏斗的末端出现严重流失</strong>。即便访客和推广端优化得再好，最终用户仍会因商品/服务问题流失——这是 <strong>最容易被忽视、却最致命的指标</strong>。</div>
+  <div class="section-summary reveal" data-label="一句话总结">6月72.72%的退款率（¥48,026/¥66,039）远高于行业健康水平（&lt;15%），且持续6个月高于50%——商品/服务问题已经严重侵蚀经营成果，必须立即排查品控、详情页与售后流程。</div>
+</section>
+
 <section>
-  <div class="section-header"><div class="num">Section 05</div><h2>需要您决策的关键问题</h2></div>
+  <div class="section-header" id="sec-decision"><div class="num">Section 06</div><h2>需要您决策的关键问题</h2></div>
   <p style="color:var(--stone);max-width:65ch;margin-bottom:32px;" class="reveal">以下五个问题环环相扣，基于数据分析提出，需要您作为新任经营者逐一决策。点击选项查看分析建议。</p>
 
   <div class="decision-panel reveal" id="d1">
@@ -345,7 +430,7 @@ footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; 
 </section>
 
 <section>
-  <div class="section-header"><div class="num">Section 06</div><h2>综合诊断：SWOT分析</h2></div>
+  <div class="section-header" id="sec-swot"><div class="num">Section 07</div><h2>综合诊断：SWOT分析</h2></div>
   <div class="swot-grid reveal">
     <div class="swot-cell s"><h4>S 优势</h4><ul><li>品牌调性清晰：运动时尚+足球基因</li><li>客单价提升至&yen;421，中高端定位</li><li>鞋类产品转化率3.77%-3.95%</li><li>站内沟通UV价值&yen;20.02</li><li>搜索流量质量好（UV价值&yen;3.71）</li><li>跳失率从59%改善至45%</li></ul></div>
     <div class="swot-cell w"><h4>W 劣势</h4><ul><li>访客和收入断崖式下跌</li><li>转化率仅0.60%，远低于行业均值</li><li>新客占比99.1%，几乎零复购</li><li>推广ROI仅0.48，严重亏损</li><li>产品线仅10款，30%零产出</li><li>会员体系形同虚设</li><li>内容营销（直播/短视频/逛逛）近乎空白</li></ul></div>
@@ -356,7 +441,7 @@ footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; 
 </section>
 
 <section>
-  <div class="section-header"><div class="num">Section 07</div><h2>经营者上任 90 天行动路线图</h2></div>
+  <div class="section-header" id="sec-roadmap"><div class="num">Section 08</div><h2>经营者上任 90 天行动路线图</h2></div>
   <div class="reveal">
     <div class="scope-box"><h4>第 1–30 天 · 止血与诊断</h4><ul><li><strong>立即暂停</strong>智能场景推广（月省&yen;4,825），优化全站推广人群定向</li><li><strong>下架</strong>3款零产出产品，集中资源打造爆款</li><li><strong>优化</strong>高跳出率产品详情页（女运动裤65.41%、休闲裤61.94%）</li><li><strong>建立</strong>基础会员权益：入会享9折，关注店铺领&yen;10券</li><li><strong>排查</strong>1月高业绩来源，确认是否为脉冲式促销效果</li></ul></div>
     <div class="scope-box"><h4>第 31–60 天 · 优化与激活</h4><ul><li><strong>新增</strong>3-5款鞋类产品，深耕核心品类</li><li><strong>优化</strong>短视频内容，挂商品链接+添加促销信息</li><li><strong>启动</strong>周播直播（每周2-3场），测试时段和主播</li><li><strong>推广</strong>淘金币渠道，目标UV价值维持&yen;15以上</li><li><strong>上线</strong>老客复购优惠券，推送购买后7天&yen;20券</li></ul></div>
@@ -399,6 +484,48 @@ function showResult(resultId, panelId) {
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+})();
+
+// ===== 吸顶导航 active 状态 =====
+(function() {
+  var nav = document.getElementById('stickyNav');
+  if (!nav) return;
+  var links = nav.querySelectorAll('a[href^="#"]');
+  var sections = [];
+  links.forEach(function(a) {
+    var target = document.querySelector(a.getAttribute('href'));
+    if (target) sections.push({ el: target, link: a });
+  });
+  function update() {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var activeIdx = -1;
+    for (var i = 0; i < sections.length; i++) {
+      var rect = sections[i].el.getBoundingClientRect();
+      if (rect.top <= 120) activeIdx = i;
+    }
+    links.forEach(function(a) { a.classList.remove('active'); });
+    if (activeIdx >= 0) sections[activeIdx].link.classList.add('active');
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+// ===== 退款趋势表格填充 =====
+(function() {
+  var tbody = document.getElementById('refund-trend-tbody');
+  if (!tbody) return;
+  var rows = [
+    { date: '2026-01', pay: 351517.78, refund: 184857.95, rate: 52.59 },
+    { date: '2026-02', pay: 129612.45, refund: 109573.12, rate: 84.54 },
+    { date: '2026-03', pay: 108450.32, refund: 67530.23, rate: 62.27 },
+    { date: '2026-04', pay: 110688.94, refund: 71119.59, rate: 64.25 },
+    { date: '2026-05', pay: 79705.63, refund: 57579.22, rate: 72.24 },
+    { date: '2026-06', pay: 66038.89, refund: 48025.92, rate: 72.72 }
+  ];
+  tbody.innerHTML = rows.map(function(r) {
+    var rateColor = r.rate > 70 ? 'color:var(--accent);font-weight:600' : (r.rate > 50 ? 'color:#d97706;font-weight:500' : 'color:var(--ink)');
+    return '<tr><td>' + r.date + '</td><td>¥' + r.pay.toLocaleString() + '</td><td>¥' + r.refund.toLocaleString() + '</td><td style="' + rateColor + '">' + r.rate.toFixed(2) + '%</td></tr>';
+  }).join('');
 })();
 </script>
 </body>
