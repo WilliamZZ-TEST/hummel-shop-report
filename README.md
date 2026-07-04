@@ -63,12 +63,10 @@ hummel-analysis/
 ├── hummel-analysis.html        # 主报告入口
 ├── README.md                    # 本文件
 ├── assets/
-│   └── charts.js               # ECharts 图表配置
-└── _shared/
-    ├── js/
-    │   ├── echarts.min.js      # ECharts 库
-    │   └── mermaid.min.js      # Mermaid 库
-    └── fonts/                   # 字体（按需）
+│   ├── charts.js               # ECharts 图表配置（10 个图表）
+│   └── js/
+│       ├── echarts.min.js      # ECharts 库
+│       └── mermaid.min.js      # Mermaid 库
 ```
 
 ---
