@@ -2,1039 +2,404 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>hummel天猫旗舰店商品深度分析报告</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --canvas: #faf9f5;
-      --ink: #141413;
-      --mist: #f0eee6;
-      --stone: #5e5d59;
-      --cloud: #ffffff;
-      --accent: #e2001a;
-      --accent-glow: rgba(226, 0, 26, 0.08);
-      --ink-60: rgba(20, 20, 19, 0.6);
-      --ink-15: rgba(20, 20, 19, 0.15);
-      --ink-08: rgba(20, 20, 19, 0.08);
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hummel 天猫旗舰店深度经营诊断报告 | 2026.06</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap');
 
-      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-      --ease-in-out-sine: cubic-bezier(0.37, 0, 0.63, 1);
-    }
+:root {
+  --canvas: #faf9f5;
+  --ink: #141413;
+  --mist: #f0eee6;
+  --stone: #5e5d59;
+  --cloud: #ffffff;
+  --accent: #e2001a;
+  --accent-glow: rgba(226, 0, 26, 0.08);
+  --ink-60: rgba(20, 20, 19, 0.6);
+  --ink-15: rgba(20, 20, 19, 0.15);
+  --ink-08: rgba(20, 20, 19, 0.08);
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-body); background: var(--canvas); color: var(--ink); line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+.hero { padding: clamp(80px, 12vh, 140px) clamp(24px, 5vw, 80px) clamp(64px, 8vh, 96px); text-align: center; max-width: 1280px; margin: 0 auto; }
+.hero .brand { font-family: var(--font-body); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+.hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); max-width: 800px; margin: 0 auto 16px; animation: heroReveal 0.8s var(--ease-out-expo) both; }
+.hero .lead { font-size: 1.125rem; color: var(--stone); max-width: 560px; margin: 0 auto 32px; line-height: 1.6; animation: heroReveal 0.8s var(--ease-out-expo) 0.15s both; }
+.hero .meta { display: inline-flex; gap: 32px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-60); animation: heroReveal 0.8s var(--ease-out-expo) 0.3s both; }
+.hero .meta span { display: flex; align-items: center; gap: 8px; }
+.hero .meta .dot { width: 6px; height: 6px; background: var(--accent); display: inline-block; }
+@keyframes heroReveal { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
 
-    body {
-      font-family: var(--font-body);
-      font-size: 1rem;
-      line-height: 1.6;
-      color: var(--ink);
-      background-color: var(--canvas);
-      max-width: 720px;
-      margin: 0 auto;
-    }
+.kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1280px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 80px); border-top: 1px solid var(--ink-15); border-bottom: 1px solid var(--ink-15); }
+.kpi-item { padding: 32px 24px; text-align: center; border-right: 1px solid var(--ink-08); }
+.kpi-item:last-child { border-right: none; }
+.kpi-item .val { font-family: var(--font-display); font-size: 2rem; color: var(--ink); line-height: 1.1; }
+.kpi-item .val.red { color: var(--accent); }
+.kpi-item .lbl { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone); margin-top: 8px; }
+.kpi-item .chg { font-size: 0.75rem; color: var(--accent); margin-top: 4px; font-family: var(--font-mono); }
 
-    :root {
-      --font-display: 'DM Serif Display', Georgia, serif;
-      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-    }
+section { max-width: 1280px; margin: 0 auto; padding: clamp(64px, 8vh, 96px) clamp(24px, 5vw, 80px); border-bottom: 1px solid var(--ink-08); }
+section:last-of-type { border-bottom: none; }
+.section-header { margin-bottom: 48px; }
+.section-header .num { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+.section-header h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 2.5vw, 2.25rem); font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; color: var(--ink); max-width: 720px; }
 
-    .container {
-      padding: clamp(24px, 5vw, 80px) 24px 80px;
-    }
+.content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.insight-box { background: var(--mist); padding: 32px; }
+.insight-box h4 { font-family: var(--font-body); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); margin-bottom: 16px; }
+.insight-box ul { list-style: none; padding: 0; }
+.insight-box li { padding: 8px 0; font-size: 0.95rem; color: var(--ink); border-bottom: 1px solid var(--ink-08); position: relative; padding-left: 16px; }
+.insight-box li:last-child { border-bottom: none; }
+.insight-box li::before { content: ''; position: absolute; left: 0; top: 16px; width: 5px; height: 5px; background: var(--accent); }
+.insight-box.good { border-left: 3px solid var(--ink); }
+.insight-box.bad { border-left: 3px solid var(--accent); }
+.insight-box.warn { border-left: 3px solid var(--stone); }
 
-    header.cover {
-      text-align: center;
-      margin-bottom: clamp(48px, 8vh, 96px);
-      padding: clamp(48px, 10vh, 80px) 0 32px;
-    }
+.alert { padding: 20px 24px; margin: 32px 0; font-size: 0.95rem; line-height: 1.6; }
+.alert-red { background: var(--accent-glow); border-left: 3px solid var(--accent); color: #7f0010; }
+.alert-ink { background: var(--ink-08); border-left: 3px solid var(--ink); color: var(--ink); }
+.alert strong { display: block; margin-bottom: 4px; color: var(--ink); }
 
-    header.cover h1 {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 4vw, 4rem);
-      font-weight: 400;
-      letter-spacing: -0.01em;
-      color: var(--ink);
-      margin-bottom: 1rem;
-      line-height: 1.1;
-    }
+.section-summary { margin-top: 40px; padding: 24px; background: var(--mist); font-family: var(--font-display); font-size: 1.15rem; line-height: 1.5; color: var(--ink); letter-spacing: -0.005em; position: relative; }
+.section-summary::before { content: attr(data-label); display: block; font-family: var(--font-body); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
 
-    header.cover .subtitle {
-      font-size: 1.125rem;
-      color: var(--stone);
-      margin-bottom: 2rem;
-      font-weight: 300;
-    }
+.chart-figure { margin: 40px 0; }
+.chart-figure figcaption { font-family: var(--font-body); font-size: 0.8rem; font-weight: 500; color: var(--stone); margin-bottom: 16px; letter-spacing: 0.02em; }
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 32px 0; }
 
-    header.cover .period {
-      display: inline-flex;
-      padding: 8px 16px;
-      background-color: var(--mist);
-      border-radius: 0;
-      font-size: 0.875rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--stone);
-    }
+.table-wrap { overflow-x: auto; margin: 32px 0; border: 1px solid var(--ink-15); }
+table { width: 100%; border-collapse: collapse; font-size: 0.875rem; min-width: 700px; }
+thead th { background: var(--ink); color: var(--cloud); padding: 14px 16px; text-align: left; font-family: var(--font-body); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; position: sticky; top: 0; z-index: 1; }
+tbody td { padding: 12px 16px; border-bottom: 1px solid var(--ink-08); font-variant-numeric: tabular-nums; }
+tbody tr:nth-child(even) { background: var(--mist); }
+td.num { text-align: right; font-family: var(--font-mono); font-size: 0.8rem; }
 
-    h2 {
-      font-family: var(--font-display);
-      font-size: clamp(1.75rem, 2.5vw, 2.5rem);
-      font-weight: 400;
-      color: var(--ink);
-      margin: clamp(48px, 8vh, 96px) 0 24px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--ink-15);
-    }
+.tag { display: inline-flex; padding: 4px 10px; font-family: var(--font-body); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+.tag-red { background: var(--accent-glow); color: var(--accent); }
+.tag-ink { background: var(--ink-08); color: var(--ink); }
+.tag-stone { background: var(--mist); color: var(--stone); }
 
-    h3 {
-      font-size: 1.25rem;
-      font-weight: 500;
-      color: var(--ink);
-      margin: 32px 0 16px;
-    }
+.decision-panel { margin: 40px 0; padding: 32px; background: var(--mist); border-left: 3px solid var(--accent); }
+.decision-panel h4 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--ink); letter-spacing: -0.005em; margin-bottom: 12px; }
+.decision-panel p { font-size: 0.95rem; color: var(--stone); margin-bottom: 20px; max-width: 65ch; }
+.decision-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+.decision-btn { padding: 12px 24px; font-family: var(--font-body); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; border: none; transition: all 0.2s var(--ease-out-quart); }
+.decision-btn.primary { background: var(--accent); color: var(--cloud); }
+.decision-btn.primary:hover { background: #c40016; transform: translateY(-1px); }
+.decision-btn.secondary { background: transparent; color: var(--ink); border: 1px solid var(--ink-15); }
+.decision-btn.secondary:hover { border-color: var(--ink); background: var(--ink-08); }
+.decision-result { margin-top: 20px; padding: 20px; background: var(--cloud); display: none; font-size: 0.9rem; line-height: 1.6; color: var(--ink); border: 1px solid var(--ink-15); }
+.decision-result.show { display: block; }
 
-    .section-summary {
-      margin: 0 0 24px;
-      padding: 16px;
-      background-color: var(--mist);
-      border-left: 3px solid var(--accent);
-    }
+.scope-box { background: var(--ink-08); padding: 24px; margin-bottom: 16px; }
+.scope-box h4 { font-family: var(--font-body); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+.scope-box ul { padding-left: 20px; color: var(--ink); font-size: 0.9rem; }
+.scope-box li { margin-bottom: 6px; }
 
-    .section-summary strong {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: var(--ink);
-      display: block;
-    }
+.swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ink-15); margin: 32px 0; }
+.swot-cell { background: var(--canvas); padding: 32px; }
+.swot-cell h4 { font-family: var(--font-body); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; }
+.swot-cell.s h4 { color: var(--ink); }
+.swot-cell.w h4 { color: var(--accent); }
+.swot-cell.o h4 { color: var(--stone); }
+.swot-cell.t h4 { color: var(--stone); }
+.swot-cell ul { list-style: none; padding: 0; font-size: 0.9rem; }
+.swot-cell li { padding: 6px 0; border-bottom: 1px solid var(--ink-08); }
+.swot-cell li:last-child { border-bottom: none; }
 
-    p {
-      margin-bottom: 1rem;
-      color: var(--ink);
-    }
+footer { background: var(--ink); color: var(--cloud); padding: clamp(48px, 6vh, 72px) clamp(24px, 5vw, 80px); }
+footer .sources { max-width: 1280px; margin: 0 auto; }
+footer .sources h2 { font-family: var(--font-body); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cloud); opacity: 0.5; margin-bottom: 20px; }
+footer .sources ol { padding-left: 1.2rem; font-size: 0.8rem; opacity: 0.7; }
+footer .sources li { margin-bottom: 8px; overflow-wrap: break-word; word-break: break-all; }
+footer .sources .src-title { color: var(--cloud); word-break: normal; }
+footer .sources .src-url { display: block; margin-top: 4px; font-size: 0.75rem; opacity: 0.5; word-break: break-all; }
 
-    strong {
-      font-weight: 600;
-      color: var(--ink);
-    }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s var(--ease-out-quart), transform 0.6s var(--ease-out-quart); }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
 
-    .tag {
-      display: inline-flex;
-      padding: 6px 12px;
-      background: var(--accent-glow);
-      color: var(--accent);
-      font-family: var(--font-body);
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 16px;
-      margin: 32px 0;
-    }
-
-    .stat-card {
-      background-color: var(--mist);
-      padding: 24px 16px;
-      text-align: center;
-      border-radius: 0;
-      border: 1px solid var(--ink-08);
-      transition: border-color 0.2s var(--ease-out-quart);
-    }
-
-    .stat-card:hover {
-      border-color: var(--accent);
-    }
-
-    .stat-card .value {
-      display: block;
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: var(--accent);
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-
-    .stat-card .label {
-      font-size: 0.875rem;
-      color: var(--stone);
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      margin: 24px 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1px solid var(--ink-15);
-    }
-
-    table th {
-      background-color: var(--mist);
-      color: var(--ink);
-      font-weight: 600;
-      padding: 12px;
-      text-align: left;
-      font-size: 0.875rem;
-      border-bottom: 2px solid var(--ink-15);
-    }
-
-    table td {
-      padding: 12px;
-      border-bottom: 1px solid var(--ink-08);
-    }
-
-    table tbody tr:nth-child(even) {
-      background-color: var(--mist);
-    }
-
-    .chart-figure {
-      margin: 32px 0;
-    }
-
-    .chart-figure figcaption {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--stone);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .chart-container {
-      width: 100%;
-      min-height: 400px;
-      border: 1px solid var(--ink-15);
-      background-color: var(--cloud);
-    }
-
-    .chart-container.tall {
-      min-height: 460px;
-    }
-
-    .callout {
-      margin: 32px 0;
-      padding: 24px;
-      background-color: var(--mist);
-      border-left: 3px solid var(--accent);
-    }
-
-    .callout.warning {
-      border-left-color: var(--accent);
-      background-color: var(--accent-glow);
-    }
-
-    .callout h4 {
-      margin-bottom: 12px;
-      color: var(--ink);
-      font-size: 1.125rem;
-    }
-
-    .callout.warning h4 {
-      color: var(--accent);
-    }
-
-    .top-products {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-      margin: 24px 0;
-    }
-
-    .product-card {
-      background-color: var(--mist);
-      padding: 16px;
-      border: 1px solid var(--ink-08);
-      transition: border-color 0.2s var(--ease-out-quart);
-    }
-
-    .product-card:hover {
-      border-color: var(--accent);
-    }
-
-    .product-card h4 {
-      font-size: 0.95rem;
-      margin-bottom: 12px;
-      line-height: 1.4;
-      font-weight: 500;
-    }
-
-    .product-card .metric {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: var(--stone);
-    }
-
-    .product-card .metric strong {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    footer {
-      margin-top: 96px;
-      padding-top: 32px;
-      border-top: 1px solid var(--ink-15);
-    }
-
-    footer .sources h2 {
-      font-family: var(--font-body);
-      font-size: 1.25rem;
-      font-weight: 500;
-      margin-top: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-
-    /* Inline citations */
-    sup a {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 0.75em;
-      font-weight: 600;
-    }
-    sup a:hover {
-      text-decoration: underline;
-    }
-
-    /* Sources list */
-    footer .sources ol {
-      padding-left: 1.2rem;
-      font-size: 0.85rem;
-      color: var(--stone);
-    }
-
-    footer .sources li {
-      margin-bottom: 0.5rem;
-      overflow-wrap: break-word;
-      word-break: break-all;
-    }
-
-    footer .sources .src-title {
-      color: var(--ink);
-      word-break: normal;
-    }
-
-    footer .sources .src-url {
-      display: block;
-      margin-top: 0.15rem;
-      font-size: 0.82rem;
-      color: var(--accent);
-      word-break: break-all;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.6s var(--ease-out-quart), transform 0.6s var(--ease-out-quart);
-    }
-
-    .reveal.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-      .reveal {
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    }
-
-    /* Sticky Nav */
-    .site-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background-color: var(--canvas);
-      border-bottom: 1px solid var(--ink-15);
-      padding: 0;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      white-space: nowrap;
-    }
-
-    .site-nav::-webkit-scrollbar {
-      display: none;
-    }
-
-    .site-nav-inner {
-      max-width: 720px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 0;
-      padding: 0 16px;
-      min-height: 48px;
-    }
-
-    .site-nav .nav-brand {
-      font-family: var(--font-display);
-      font-size: 1rem;
-      color: var(--ink);
-      text-decoration: none;
-      flex-shrink: 0;
-      padding-right: 20px;
-      margin-right: 4px;
-      border-right: 1px solid var(--ink-15);
-      white-space: nowrap;
-    }
-
-    .site-nav .nav-links {
-      display: flex;
-      gap: 0;
-      flex-shrink: 0;
-    }
-
-    .site-nav .nav-links a {
-      display: inline-block;
-      padding: 14px 10px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--stone);
-      text-decoration: none;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-      transition: color 0.2s var(--ease-out-quart);
-      border-bottom: 2px solid transparent;
-    }
-
-    .site-nav .nav-links a:hover {
-      color: var(--ink);
-    }
-
-    .site-nav .nav-links a.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    body {
-      padding-top: 48px;
-    }
-
-    @media (max-width: 640px) {
-      .container {
-        padding: 16px 16px 64px;
-      }
-      header.cover h1 {
-        font-size: 2rem;
-      }
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .top-products {
-        grid-template-columns: 1fr;
-      }
-      .site-nav .nav-brand {
-        font-size: 0.9rem;
-        padding-right: 12px;
-      }
-      .site-nav .nav-links a {
-        padding: 12px 8px;
-        font-size: 0.75rem;
-      }
-    }
-  </style>
+@media (max-width: 1024px) {
+  .content-grid, .chart-grid { grid-template-columns: 1fr; }
+  .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+  .kpi-item:nth-child(2n) { border-right: none; }
+  .kpi-item:nth-child(n+3) { border-top: 1px solid var(--ink-08); }
+  .swot-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .kpi-strip { grid-template-columns: 1fr; }
+  .kpi-item { border-right: none; border-bottom: 1px solid var(--ink-08); }
+  .kpi-item:last-child { border-bottom: none; }
+  .hero h1 { font-size: 1.75rem; }
+  .decision-buttons { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .hero h1, .hero .lead, .hero .meta { animation: none; }
+}
+</style>
 </head>
 <body>
-  <nav class="site-nav">
-    <div class="site-nav-inner">
-      <a href="#top" class="nav-brand">hummel 分析报告</a>
-      <div class="nav-links">
-        <a href="#summary">执行摘要</a>
-        <a href="#overview">总体运营</a>
-        <a href="#monthly-trend">月度趋势</a>
-        <a href="#category">品类结构</a>
-        <a href="#price-band">价格带</a>
-        <a href="#customer">顾客结构</a>
-        <a href="#traffic">流量转化</a>
-        <a href="#refund">退款分析</a>
-        <a href="#top-products">核心商品</a>
-        <a href="#conclusion">结论建议</a>
-      </div>
+
+<header class="hero">
+  <div class="brand">hummel 旗舰店</div>
+  <h1>深度经营诊断报告</h1>
+  <p class="lead">基于2026年1月至6月天猫店铺全维度数据的系统分析，为即将上任的经营者提供决策支持。</p>
+  <div class="meta">
+    <span><span class="dot"></span>数据周期 2026.01–06</span>
+    <span><span class="dot"></span>报告生成 2026.07.01</span>
+    <span><span class="dot"></span>6份数据源</span>
+  </div>
+</header>
+
+<div class="kpi-strip">
+  <div class="kpi-item"><div class="val red">&yen;66,039</div><div class="lbl">6月支付金额</div><div class="chg">&#8595; 81.2% vs 1月</div></div>
+  <div class="kpi-item"><div class="val">26,386</div><div class="lbl">6月访客数</div><div class="chg">&#8595; 67.6% vs 1月</div></div>
+  <div class="kpi-item"><div class="val red">0.60%</div><div class="lbl">支付转化率</div><div class="chg">&#8595; 1.12pp vs 1月</div></div>
+  <div class="kpi-item"><div class="val">&yen;421</div><div class="lbl">客单价</div><div class="chg">&#8593; 68.4% vs 1月</div></div>
+</div>
+
+<section>
+  <div class="section-header"><div class="num">Executive Summary</div><h2>执行摘要</h2></div>
+  <div class="reveal">
+    <p style="max-width:65ch;font-size:1.05rem;line-height:1.7;color:var(--ink);">
+      Hummel天猫旗舰店在2026年上半年经历了<strong>剧烈且持续的业绩下滑</strong>。从1月峰值（访客81,516人，支付金额&yen;351,518，支付买家1,406人）到6月仅剩访客26,386人，支付金额&yen;66,039，支付买家157人——<strong style="color:var(--accent);">核心指标全面萎缩，降幅达67%-89%</strong>。
+    </p>
+  </div>
+  <div class="alert alert-red reveal"><strong>核心危机</strong>支付买家数从1,406人暴跌至157人（降幅88.8%），店铺正处于"有流量无转化、有产品无复购"的困境中。1月的高业绩极可能是年货节+春节大促的脉冲效应，后续月份缺乏持续经营能力。</div>
+  <div class="content-grid reveal" style="margin-top:32px;">
+    <div class="insight-box good">
+      <h4>品牌资产</h4>
+      <ul><li>客单价从&yen;250升至&yen;421，品牌具备中高端定价能力</li><li>跳失率从59%降至45%，页面体验有所改善</li><li>鞋类产品转化率3.77%-3.95%，品类竞争力突出</li><li>站内沟通渠道UV价值&yen;20.02，转化效率极高</li></ul>
     </div>
-  </nav>
+    <div class="insight-box bad">
+      <h4>核心短板</h4>
+      <ul><li>访客断崖下跌：81,516 → 26,386（-67.6%）</li><li>推广ROI仅0.48：每花1元回收0.48元</li><li>新客占比99.1%，复购率几乎为零</li><li>10款产品中3款零产出，产品线效率低下</li><li>会员体系形同虚设：20人访问，0成交</li></ul>
+    </div>
+  </div>
+  <div class="section-summary reveal" data-label="一句话总结">店铺正经历从"大促脉冲"到"自然经营"的阵痛转型，核心挑战不是流量获取，而是转化效率与用户留存的双重缺失。</div>
+</section>
 
-  <div class="container" id="top">
-    <header class="cover">
-      <h1>hummel天猫旗舰店商品深度分析报告</h1>
-      <p class="subtitle">基于生意参谋月度商品数据的经营诊断与战略洞察</p>
-      <span class="period">分析周期：2025年5月 - 2026年6月（共14个月）</span>
-    </header>
+<section>
+  <div class="section-header"><div class="num">Section 01</div><h2>店铺经营核心指标分析</h2></div>
+  <div class="reveal"><h3 style="font-family:var(--font-display);font-size:1.3rem;font-weight:400;letter-spacing:-0.005em;margin-bottom:24px;">1.1 访客与收入趋势</h3></div>
+  <figure class="chart-figure reveal"><figcaption>图1：2026年1–6月访客数与支付金额变化趋势</figcaption><div id="chart-visitors-revenue" style="width:100%;min-height:400px"></div></figure>
+  <figure class="chart-figure reveal"><figcaption>图2：支付转化率与UV价值变化</figcaption><div id="chart-conv-uv" style="width:100%;min-height:400px"></div></figure>
+  <div class="content-grid reveal">
+    <div class="insight-box good"><h4>亮点</h4><ul><li>客单价持续提升至&yen;421，品牌溢价能力增强</li><li>跳失率从59.21%降至44.99%，页面吸引力改善</li><li>4月访客曾达70,580人，仍有获取大规模流量的能力</li></ul></div>
+    <div class="insight-box bad"><h4>风险</h4><ul><li>支付金额&yen;351,518 → &yen;66,039，月均降幅超20%</li><li>加购人数2,566 → 731，购买意愿显著下降</li><li>UV价值4.31 → 2.50，流量变现效率近乎腰斩</li><li>转化率全年低于服装类目行业均值（1.5%-3%）</li></ul></div>
+  </div>
+  <figure class="chart-figure reveal"><figcaption>图3：客单价与加购人数趋势</figcaption><div id="chart-aov" style="width:100%;min-height:400px"></div></figure>
+  <figure class="chart-figure reveal"><figcaption>图4：跳失率与平均停留时长趋势</figcaption><div id="chart-bounce-stay" style="width:100%;min-height:400px"></div></figure>
+  <div class="alert alert-red reveal"><strong>关键警示</strong>客单价提升与加购人数大幅下滑形成"高价低量"恶性循环。6月加购仅731人（1月2,566人），平均停留时长从9.52秒降至8.01秒——用户浏览深度不足，决策门槛过高。</div>
+  <div class="section-summary reveal" data-label="一句话总结">访客腰斩、转化低迷、客单价被动拉升——店铺正陷入"高价低量"的恶性循环，核心问题不在获客而在转化效率与用户信任的缺失。</div>
+</section>
 
-    <section class="reveal" id="summary">
-      <h2>执行摘要</h2>
-      <div class="section-summary"><strong>品牌业绩高度集中于大促期间，退款率与季节性波动构成核心经营风险。</strong></div>
-      <p>本报告基于hummel天猫旗舰店<strong>2025年5月至2026年6月</strong>共14个月的商品销售数据进行深度分析，核心发现如下：</p>
+<section>
+  <div class="section-header"><div class="num">Section 02</div><h2>店铺流量来源深度分析</h2></div>
+  <figure class="chart-figure reveal"><figcaption>图5：6月各流量来源访客数与支付金额对比</figcaption><div id="chart-traffic-source" style="width:100%;min-height:400px"></div></figure>
+  <div class="table-wrap reveal">
+    <table><thead><tr><th>来源渠道</th><th>访客数</th><th>占比</th><th>支付金额</th><th>支付买家</th><th>UV价值</th><th>诊断</th></tr></thead><tbody>
+      <tr><td>手淘推荐</td><td class="num">9,266</td><td class="num">40.7%</td><td class="num">&yen;17,204</td><td class="num">41</td><td class="num">&yen;1.86</td><td><span class="tag tag-stone">量大质低</span></td></tr>
+      <tr><td>付费推广（无界）</td><td class="num">4,581</td><td class="num">20.1%</td><td class="num">&yen;4,252</td><td class="num">15</td><td class="num">&yen;0.93</td><td><span class="tag tag-red">ROI极低</span></td></tr>
+      <tr><td>手淘搜索</td><td class="num">3,307</td><td class="num">14.5%</td><td class="num">&yen;12,283</td><td class="num">35</td><td class="num">&yen;3.71</td><td><span class="tag tag-ink">优质流量</span></td></tr>
+      <tr><td>站内沟通</td><td class="num">1,892</td><td class="num">8.3%</td><td class="num">&yen;37,869</td><td class="num">86</td><td class="num">&yen;20.02</td><td><span class="tag tag-ink">最高转化</span></td></tr>
+      <tr><td>淘宝直播</td><td class="num">1,856</td><td class="num">8.1%</td><td class="num">&yen;4,481</td><td class="num">10</td><td class="num">&yen;2.41</td><td><span class="tag tag-stone">潜力待挖</span></td></tr>
+      <tr><td>站外沟通</td><td class="num">1,522</td><td class="num">6.7%</td><td class="num">&yen;3,688</td><td class="num">14</td><td class="num">&yen;2.42</td><td><span class="tag tag-stone">辅助渠道</span></td></tr>
+      <tr><td>淘金币</td><td class="num">271</td><td class="num">1.2%</td><td class="num">&yen;4,906</td><td class="num">16</td><td class="num">&yen;18.10</td><td><span class="tag tag-ink">高ROI</span></td></tr>
+    </tbody></table>
+  </div>
+  <figure class="chart-figure reveal"><figcaption>图6：6月各推广渠道花费与产出对比</figcaption><div id="chart-promo-roi" style="width:100%;min-height:400px"></div></figure>
+  <div class="content-grid reveal">
+    <div class="insight-box good"><h4>优势渠道</h4><ul><li>站内沟通UV价值&yen;20.02，是其他渠道的5-10倍</li><li>搜索流量质量好，UV价值&yen;3.71，意图明确</li><li>淘金币渠道性价比高，271访客贡献&yen;4,906</li></ul></div>
+    <div class="insight-box bad"><h4>问题渠道</h4><ul><li>40.7%流量来自推荐，UV价值仅&yen;1.86，低质流量占比过高</li><li>全站推广花费&yen;8,766仅产出&yen;4,252，ROI 0.48</li><li>智能场景推广&yen;4,825零产出</li><li>直播仅21访客/月，短视频10,745访客零转化</li></ul></div>
+  </div>
+  <div class="alert alert-red reveal"><strong>最大短板</strong>推广总花费&yen;13,899，总产出仅&yen;5,819，<strong style="color:var(--accent);">综合ROI仅0.42。智能场景推广&yen;4,825完全打水漂。</strong>推广策略存在方向性错误。</div>
+  <div class="section-summary reveal" data-label="一句话总结">推荐流量量大质低、付费推广入不敷出、站内沟通转化虽高但规模有限——流量结构亟需从"量"向"质"的战略转型。</div>
+</section>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span class="value">472.97万</span>
-          <span class="label">累计支付金额（元）</span>
-        </div>
-        <div class="stat-card">
-          <span class="value">110.47万</span>
-          <span class="label">累计访客数</span>
-        </div>
-        <div class="stat-card">
-          <span class="value">1.40万</span>
-          <span class="label">累计支付买家数</span>
-        </div>
-        <div class="stat-card">
-          <span class="value">337.40</span>
-          <span class="label">整体客单价（元）</span>
-        </div>
-      </div>
+<section>
+  <div class="section-header"><div class="num">Section 03</div><h2>商品效果与产品矩阵分析</h2></div>
+  <figure class="chart-figure reveal"><figcaption>图7：6月各商品访客数、支付金额、转化率、跳出率四维对比</figcaption><div id="chart-product-perf" style="width:100%;min-height:450px"></div></figure>
+  <div class="table-wrap reveal">
+    <table><thead><tr><th>商品</th><th>访客</th><th>支付金额</th><th>买家</th><th>转化率</th><th>跳出率</th><th>UV价值</th><th>诊断</th></tr></thead><tbody>
+      <tr><td>足球风盖盖鞋</td><td class="num">76</td><td class="num">&yen;1,172</td><td class="num">3</td><td class="num">3.95%</td><td class="num">28.89%</td><td class="num">&yen;15.42</td><td><span class="tag tag-ink">明星产品</span></td></tr>
+      <tr><td>经典薄底德训鞋</td><td class="num">53</td><td class="num">&yen;739</td><td class="num">2</td><td class="num">3.77%</td><td class="num">15.96%</td><td class="num">&yen;13.94</td><td><span class="tag tag-ink">潜力产品</span></td></tr>
+      <tr><td>梭织速干长裤</td><td class="num">23</td><td class="num">&yen;638</td><td class="num">1</td><td class="num">4.35%</td><td class="num">25.00%</td><td class="num">&yen;27.74</td><td><span class="tag tag-ink">高价值</span></td></tr>
+      <tr><td>三合一抓绒外套</td><td class="num">37</td><td class="num">&yen;519</td><td class="num">1</td><td class="num">2.70%</td><td class="num">26.67%</td><td class="num">&yen;14.02</td><td><span class="tag tag-stone">中等</span></td></tr>
+      <tr><td>松紧腰休闲裤</td><td class="num">87</td><td class="num">&yen;373</td><td class="num">1</td><td class="num">1.15%</td><td class="num">52.66%</td><td class="num">&yen;4.29</td><td><span class="tag tag-stone">高跳出</span></td></tr>
+      <tr><td>冰丝T恤</td><td class="num">69</td><td class="num">&yen;338</td><td class="num">1</td><td class="num">1.45%</td><td class="num">32.14%</td><td class="num">&yen;4.90</td><td><span class="tag tag-stone">待优化</span></td></tr>
+      <tr><td>休闲裤（男女款）</td><td class="num">120</td><td class="num">&yen;341</td><td class="num">1</td><td class="num">0.83%</td><td class="num">61.94%</td><td class="num">&yen;2.85</td><td><span class="tag tag-red">高跳低转</span></td></tr>
+      <tr><td>工装裤</td><td class="num">16</td><td class="num">&yen;0</td><td class="num">0</td><td class="num">0%</td><td class="num">16.67%</td><td class="num">&yen;0</td><td><span class="tag tag-red">零产出</span></td></tr>
+      <tr><td>女款运动裤</td><td class="num">62</td><td class="num">&yen;0</td><td class="num">0</td><td class="num">0%</td><td class="num">65.41%</td><td class="num">&yen;0</td><td><span class="tag tag-red">零产出</span></td></tr>
+      <tr><td>POLO衫</td><td class="num">48</td><td class="num">&yen;0</td><td class="num">0</td><td class="num">0%</td><td class="num">41.67%</td><td class="num">&yen;0</td><td><span class="tag tag-red">零产出</span></td></tr>
+    </tbody></table>
+  </div>
+  <figure class="chart-figure reveal"><figcaption>图8：TOP5商品健康度雷达图</figcaption><div id="chart-radar" style="width:100%;min-height:450px"></div></figure>
+  <div class="content-grid reveal">
+    <div class="insight-box good"><h4>产品优势</h4><ul><li>鞋类转化率3.77%-3.95%，远超店铺均值，是核心品类</li><li>梭织速干长裤UV价值&yen;27.74，高客单价+高转化</li><li>产品有差异化设计感，足球风、德训鞋符合运动时尚趋势</li></ul></div>
+    <div class="insight-box bad"><h4>产品问题</h4><ul><li>30%产品零产出（3款），严重拖累整体效率</li><li>仅10款在线商品，缺乏品类深度和关联销售可能</li><li>女运动裤跳出率65.41%，休闲裤61.94%，详情页存在严重问题</li><li>5月vs6月产品表现不稳定，说明产品力本身波动大</li></ul></div>
+  </div>
+  <div class="section-summary reveal" data-label="一句话总结">仅3款产品贡献全部营收，鞋类一枝独秀但品类单一，30%产品零产出——产品矩阵急需瘦身聚焦，以爆款带动全店增长。</div>
+</section>
 
-      <div class="callout">
-        <h4>核心结论</h4>
-        <ul>
-          <li><strong>大促依赖度极高</strong>：2025年10月（双十一预热）单月贡献了约<strong>55.4%</strong>的周期总营收，非大促月份业绩疲软</li>
-          <li><strong>季节性特征显著</strong>：三合一冲锋衣+羽绒服合计贡献<strong>44.3%</strong>营收，夏季品类表现低迷</li>
-          <li><strong>退款率异常严重</strong>：11/14个月退款率超过50%，最高达112%，对实际利润侵蚀严重</li>
-          <li><strong>价格带集中</strong>：300-500元价位段贡献超过56%营收，是品牌核心价位段</li>
-          <li><strong>新客占比高位</strong>：平均<strong>75%</strong>交易来自新买家，品牌仍处于用户拉新阶段，复购运营空间大</li>
-        </ul>
-      </div>
-    </section>
+<section>
+  <div class="section-header"><div class="num">Section 04</div><h2>人群与用户画像分析</h2></div>
+  <div class="chart-grid reveal">
+    <figure class="chart-figure"><figcaption>图9：新老访客占比趋势（6个月）</figcaption><div id="chart-new-old" style="width:100%;min-height:400px"></div></figure>
+    <figure class="chart-figure"><figcaption>图10：6月人群类型分布（访客维度）</figcaption><div id="chart-customer-type" style="width:100%;min-height:400px"></div></figure>
+  </div>
+  <div class="table-wrap reveal">
+    <table><thead><tr><th>人群类型</th><th>访客数</th><th>占比</th><th>支付买家</th><th>支付金额</th><th>客单价</th><th>转化率</th></tr></thead><tbody>
+      <tr><td>新客</td><td class="num">1,292</td><td class="num">70.5%</td><td class="num">28</td><td class="num">&yen;11,144</td><td class="num">&yen;398</td><td class="num">2.17%</td></tr>
+      <tr><td>粉丝</td><td class="num">303</td><td class="num">16.5%</td><td class="num">3</td><td class="num">&yen;1,014</td><td class="num">&yen;338</td><td class="num">0.99%</td></tr>
+      <tr><td>老客</td><td class="num">217</td><td class="num">11.9%</td><td class="num">5</td><td class="num">&yen;3,190</td><td class="num">&yen;638</td><td class="num">2.30%</td></tr>
+      <tr><td>会员</td><td class="num">20</td><td class="num">1.1%</td><td class="num">0</td><td class="num">&yen;0</td><td class="num">—</td><td class="num">0%</td></tr>
+    </tbody></table>
+  </div>
+  <div class="content-grid reveal">
+    <div class="insight-box good"><h4>积极信号</h4><ul><li>老客转化率最高（2.30%），客单价&yen;638远超新客&yen;398</li><li>老客价值明显：一旦建立信任，ARPU潜力巨大</li></ul></div>
+    <div class="insight-box bad"><h4>结构缺陷</h4><ul><li>会员20人访问，0成交——会员体系形同虚设</li><li>粉丝转化率仅0.99%，关注后未激活</li><li>老客仅217人，店铺几乎没有复购基础</li><li>新客占比70.5%，极度依赖新客获取，成本不可持续</li></ul></div>
+  </div>
+  <div class="alert alert-red reveal"><strong>核心短板</strong>会员0成交、粉丝转化率0.99%、老客仅217人——<strong style="color:var(--accent);">店铺完全没有用户运营体系</strong>。所有成交都是一次性交易，没有复购、没有会员权益、没有粉丝专属优惠。这是最致命的结构性缺陷。</div>
+  <div class="section-summary reveal" data-label="一句话总结">99%新客占比意味着店铺没有复购发动机，会员体系为零、粉丝运营失效——用户资产几乎为零，这是最致命的结构性缺陷。</div>
+</section>
 
-    <section class="reveal" id="overview">
-      <h2>总体运营概况</h2>
-      <div class="section-summary"><strong>14个月累计营收472.97万元，但单月业绩波动极大，平销月营收仅为大促月峰值的5%。</strong></div>
-      <p>在分析的14个月周期内，hummel天猫旗舰店累计实现支付金额<strong>4,729,675.54元</strong>，累计吸引访客<strong>1,104,726人</strong>，产生支付买家<strong>14,018人</strong>，累计支付商品<strong>18,368件</strong>。</p>
+<section>
+  <div class="section-header"><div class="num">Section 05</div><h2>需要您决策的关键问题</h2></div>
+  <p style="color:var(--stone);max-width:65ch;margin-bottom:32px;" class="reveal">以下五个问题环环相扣，基于数据分析提出，需要您作为新任经营者逐一决策。点击选项查看分析建议。</p>
 
-      <p>整体运营指标如下：</p>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span class="value">1.27%</span>
-          <span class="label">整体支付转化率</span>
-        </div>
-        <div class="stat-card">
-          <span class="value">337.40</span>
-          <span class="label">平均客单价（元）</span>
-        </div>
-        <div class="stat-card">
-          <span class="value">4.28</span>
-          <span class="label">平均访客价值（元）</span>
-        </div>
-        <div class="stat-card">
-          <span class="value">59.2%</span>
-          <span class="label">平均退款率</span>
-        </div>
-      </div>
-
-      <figure class="chart-figure">
-        <figcaption>图1：月度支付金额趋势</figcaption>
-        <div id="chart-revenue" class="chart-container"></div>
-      </figure>
-
-      <p>从月度趋势可以清晰看出，品牌业绩呈现<strong>极强的脉冲式特征</strong>：在2025年10月达到峰值<strong>262.16万元</strong>，占整个分析周期总营收的<strong>55.4%</strong>，而正常月份的支付金额大多维持在6-16万元区间，差距超过15倍。这一现象充分说明品牌高度依赖大促活动拉动业绩，平销能力较弱。</p>
-
-      <p>业绩高点出现在10月（双十一预热阶段），随后迅速回落，11月支付金额骤降至38.9万元，仅为上月的14.9%，说明大促集中释放了消费需求，后续需要较长时间消化。</p>
-    </section>
-
-    <section class="reveal" id="monthly-trend">
-      <h2>月度趋势分析</h2>
-      <div class="section-summary"><strong>大促期间流量与转化率形成正向共振，变现效率是平销月份的3—8倍。</strong></div>
-      <p>本章节从流量、转化率、客单价多个维度分析月度变化规律。</p>
-
-      <figure class="chart-figure">
-        <figcaption>图2：月度访客数与支付转化率</figcaption>
-        <div id="chart-traffic" class="chart-container"></div>
-      </figure>
-
-      <p>流量与转化率呈现<strong>正向协同关系</strong>：大促期间（2025年10月）访客量达到21.88万，转化率同时攀升至<strong>2.89%</strong>，远高于周期平均水平，说明大促流量不仅量级大，购买意愿也更强。非大促月份访客量普遍在3-8万区间，转化率大多在0.4-1.2%之间。</p>
-
-      <figure class="chart-figure">
-        <figcaption>图3：月度访客平均价值趋势</figcaption>
-        <div id="chart-visitor-value" class="chart-container"></div>
-      </figure>
-
-      <p>访客价值直接反映了流量的变现效率。数据显示，2025年10月访客价值达到<strong>11.98元</strong>，即每引入100个访客可带来近1,200元营收，而其他月份大多在1.4-4.3元之间，说明大促流量的变现效率是平销的3-8倍。</p>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>月份</th>
-              <th>访客数</th>
-              <th>支付金额(元)</th>
-              <th>支付买家数</th>
-              <th>转化率(%)</th>
-              <th>客单价(元)</th>
-              <th>访客价值(元)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>2025-05</td><td>41,721</td><td>163,315</td><td>731</td><td>1.75</td><td>223.41</td><td>3.91</td></tr>
-            <tr><td>2025-06</td><td>55,571</td><td>163,377</td><td>639</td><td>1.15</td><td>255.68</td><td>2.94</td></tr>
-            <tr><td>2025-07</td><td>75,615</td><td>120,708</td><td>437</td><td>0.58</td><td>276.22</td><td>1.60</td></tr>
-            <tr><td>2025-08</td><td>42,950</td><td>100,455</td><td>324</td><td>0.75</td><td>310.05</td><td>2.34</td></tr>
-            <tr><td>2025-09</td><td>44,096</td><td>95,723</td><td>277</td><td>0.63</td><td>345.57</td><td>2.17</td></tr>
-            <tr><td>2025-10</td><td>218,840</td><td>2,621,620</td><td>6,318</td><td>2.89</td><td>414.94</td><td>11.98</td></tr>
-            <tr><td>2025-11</td><td>193,747</td><td>389,014</td><td>1,454</td><td>0.75</td><td>267.55</td><td>2.01</td></tr>
-            <tr><td>2025-12</td><td>90,070</td><td>229,449</td><td>723</td><td>0.80</td><td>317.36</td><td>2.55</td></tr>
-            <tr><td>2026-01</td><td>81,627</td><td>351,518</td><td>1,631</td><td>2.00</td><td>215.52</td><td>4.31</td></tr>
-            <tr><td>2026-02</td><td>43,517</td><td>129,612</td><td>481</td><td>1.11</td><td>269.46</td><td>2.98</td></tr>
-            <tr><td>2026-03</td><td>76,614</td><td>108,450</td><td>268</td><td>0.35</td><td>404.67</td><td>1.42</td></tr>
-            <tr><td>2026-04</td><td>74,861</td><td>110,689</td><td>307</td><td>0.41</td><td>360.55</td><td>1.48</td></tr>
-            <tr><td>2026-05</td><td>32,891</td><td>79,706</td><td>234</td><td>0.71</td><td>340.62</td><td>2.42</td></tr>
-            <tr><td>2026-06</td><td>32,606</td><td>66,039</td><td>194</td><td>0.59</td><td>340.41</td><td>2.03</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p>客单价呈现季节性上升趋势，从年初的220-260元逐步上升到下半年的340-400元，这与高客单价的羽绒服品类在冬季销售占比提升直接相关，属于结构变化而非单价提升。</p>
-    </section>
-
-    <section class="reveal" id="category">
-      <h2>品类结构分析</h2>
-      <div class="section-summary"><strong>三合一冲锋衣与羽绒服两大品类贡献超过44%营收，秋冬品类占据绝对主导地位。</strong></div>
-      <p>根据商品名称对全店SKU进行品类分类统计，各品类贡献如下：</p>
-
-      <figure class="chart-figure">
-        <figcaption>图4：品类支付金额占比</figcaption>
-        <div id="chart-category" class="chart-container tall"></div>
-      </figure>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>品类</th>
-              <th>SKU数</th>
-              <th>支付金额(元)</th>
-              <th>支付件数</th>
-              <th>占比(%)</th>
-              <th>客单价(元)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>三合一/冲锋衣</td><td>128</td><td>1,087,877</td><td>3,059</td><td>23.00</td><td>436.55</td></tr>
-            <tr><td>羽绒服</td><td>66</td><td>1,008,862</td><td>2,134</td><td>21.33</td><td>556.77</td></tr>
-            <tr><td>鞋类</td><td>48</td><td>686,285</td><td>2,954</td><td>14.51</td><td>515.23</td></tr>
-            <tr><td>棉服/夹克/外套</td><td>269</td><td>545,849</td><td>1,563</td><td>11.54</td><td>415.09</td></tr>
-            <tr><td>POLO衫</td><td>102</td><td>379,439</td><td>1,269</td><td>8.02</td><td>358.98</td></tr>
-            <tr><td>裤装</td><td>290</td><td>205,746</td><td>998</td><td>4.35</td><td>234.60</td></tr>
-            <tr><td>T恤</td><td>318</td><td>195,559</td><td>1,121</td><td>4.13</td><td>206.29</td></tr>
-            <tr><td>配饰</td><td>11</td><td>194,889</td><td>2,180</td><td>4.12</td><td>99.53</td></tr>
-            <tr><td>卫衣</td><td>156</td><td>179,442</td><td>1,132</td><td>3.79</td><td>197.41</td></tr>
-            <tr><td>套装</td><td>13</td><td>166,185</td><td>1,480</td><td>3.51</td><td>173.83</td></tr>
-            <tr><td>针织/毛衣</td><td>16</td><td>23,933</td><td>100</td><td>0.51</td><td>271.97</td></tr>
-            <tr><td>皮肤衣/风衣</td><td>20</td><td>12,211</td><td>137</td><td>0.26</td><td>131.30</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p>品类结构呈现<strong>头部集中</strong>特征：<strong>三合一/冲锋衣</strong>和<strong>羽绒服</strong>两个品类合计贡献了<strong>44.33%</strong>的营收，是店铺绝对核心品类。鞋类排名第三，贡献14.51%，主要得益于德训鞋这一爆款单品。</p>
-
-      <p>值得注意的是，<strong>配饰品类</strong>虽然只有11个SKU，但凭借一款爆款针织围脖贡献了约19.5万营收，支付件数达到2,180件，周转率远超其他品类，说明小商品也能创造可观业绩。</p>
-
-      <blockquote class="callout">
-        <p><strong>季节性洞察：</strong>秋冬外穿品类（冲锋衣+羽绒服+棉服）合计贡献约56%营收，而夏季品类（T恤、POLO衫、皮肤衣）合计仅约12.4%，店铺收入明显偏重于寒冷季节，淡季运营存在提升空间。</p>
-      </blockquote>
-    </section>
-
-    <section class="reveal" id="price-band">
-      <h2>价格带分析</h2>
-      <div class="section-summary"><strong>300—500元价格带贡献56.8%的营收，品牌价格定位精准且得到市场验证。</strong></div>
-      <p>按商品单价格分析不同价位段的贡献分布：</p>
-
-      <figure class="chart-figure">
-        <figcaption>图5：各价格带支付金额分布</figcaption>
-        <div id="chart-price" class="chart-container"></div>
-      </figure>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>价格带（元）</th>
-              <th>支付金额（元）</th>
-              <th>支付件数</th>
-              <th>占比（%）</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>0-100</td><td>381,819</td><td>5,687</td><td>8.07</td></tr>
-            <tr><td>100-200</td><td>425,029</td><td>2,639</td><td>8.99</td></tr>
-            <tr><td>200-300</td><td>571,441</td><td>2,185</td><td>12.08</td></tr>
-            <tr><td>300-400</td><td>1,198,905</td><td>3,314</td><td>25.35</td></tr>
-            <tr><td>400-500</td><td>1,487,571</td><td>3,427</td><td>31.45</td></tr>
-            <tr><td>500-800</td><td>550,742</td><td>1,015</td><td>11.64</td></tr>
-            <tr><td>800-1000</td><td>21,242</td><td>25</td><td>0.45</td></tr>
-            <tr><td>1000以上</td><td>92,928</td><td>76</td><td>1.96</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p>数据清晰表明，hummel的核心价位段是<strong>300-500元</strong>，这一区间贡献了<strong>56.8%</strong>的营收，完全符合运动户外休闲服饰的主流定价。其中400-500元价格带贡献最大，达到31.45%。</p>
-
-      <p>0-200元低价位合计贡献约17%，主要是配饰、T恤等小件商品；800元以上高价区间贡献不足2.5%，说明品牌目前没有成功的高价核心单品。</p>
-
-      <div class="callout">
-        <p><strong>价格带战略启示：</strong>当前价格带定位与品牌定位匹配度较高，300-500元卡位准确。建议稳定巩固这一核心价位，适当丰富500-800元价格带的产品选择，挖掘更高客单价空间。</p>
-      </div>
-    </section>
-
-    <section class="reveal" id="customer">
-      <h2>顾客结构分析</h2>
-      <div class="section-summary"><strong>平均76%成交来自新买家，品牌仍处于市场拓展期，复购运营亟待补强。</strong></div>
-      <p>从新老买家构成分析店铺用户结构：</p>
-
-      <figure class="chart-figure">
-        <figcaption>图6：月度新老买家构成</figcaption>
-        <div id="chart-buyers" class="chart-container"></div>
-      </figure>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>月份</th>
-              <th>总买家数</th>
-              <th>新买家数</th>
-              <th>老买家数</th>
-              <th>新客占比(%)</th>
-              <th>老买家支付金额(元)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>2025-05</td><td>731</td><td>545</td><td>186</td><td>74.6</td><td>46,072</td></tr>
-            <tr><td>2025-06</td><td>639</td><td>514</td><td>125</td><td>80.4</td><td>35,957</td></tr>
-            <tr><td>2025-07</td><td>437</td><td>338</td><td>99</td><td>77.3</td><td>30,092</td></tr>
-            <tr><td>2025-08</td><td>324</td><td>262</td><td>62</td><td>80.9</td><td>20,002</td></tr>
-            <tr><td>2025-09</td><td>277</td><td>220</td><td>57</td><td>79.4</td><td>24,191</td></tr>
-            <tr><td>2025-10</td><td>6,318</td><td>4,670</td><td>1,648</td><td>73.9</td><td>747,824</td></tr>
-            <tr><td>2025-11</td><td>1,454</td><td>1,059</td><td>395</td><td>72.8</td><td>143,977</td></tr>
-            <tr><td>2025-12</td><td>723</td><td>508</td><td>215</td><td>70.3</td><td>87,265</td></tr>
-            <tr><td>2026-01</td><td>1,631</td><td>1,466</td><td>165</td><td>89.9</td><td>60,148</td></tr>
-            <tr><td>2026-02</td><td>481</td><td>378</td><td>103</td><td>78.6</td><td>37,592</td></tr>
-            <tr><td>2026-03</td><td>268</td><td>191</td><td>77</td><td>71.3</td><td>38,853</td></tr>
-            <tr><td>2026-04</td><td>307</td><td>219</td><td>88</td><td>71.3</td><td>34,580</td></tr>
-            <tr><td>2026-05</td><td>234</td><td>160</td><td>74</td><td>68.4</td><td>31,039</td></tr>
-            <tr><td>2026-06</td><td>194</td><td>143</td><td>51</td><td>73.7</td><td>21,092</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p>数据分析显示，店铺交易始终以<strong>新客为主</strong>，14个月平均新客占比达到<strong>76%</strong>。即使在大促后，老客占比也仅提升至26-32%，说明目前店铺增长主要依赖持续拉新，用户复购运营尚未形成规模。</p>
-
-      <p>2026年1月新客占比高达89.9%，几乎全部是新增买家，进一步印证了店铺仍处于用户扩张阶段。从获客成本角度看，持续高比例新客意味着较高的营销投入，长远来看需要提升复购率来降低单位获客成本、提升LTV。</p>
-
-      <div class="callout">
-        <p><strong>用户结构判断：</strong>hummel在天猫目前仍处于<strong>市场拓展期</strong>，品牌认知度在逐步建立，拉新效率尚可，但用户留存和复购运营明显滞后，这是下一阶段运营需要重点突破的方向。</p>
-      </div>
-    </section>
-
-    <section class="reveal" id="traffic">
-      <h2>流量与转化分析</h2>
-      <div class="section-summary"><strong>搜索流量占比持续走低，免费自然流量获取能力下降，付费推广依赖度加深。</strong></div>
-      <p>搜索流量是天猫店铺最核心的自然流量来源，数据分析如下：</p>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>月份</th>
-              <th>总访客</th>
-              <th>搜索访客</th>
-              <th>搜索占比(%)</th>
-              <th>搜索支付买家</th>
-              <th>搜索转化率(%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>2025-05</td><td>41,721</td><td>11,217</td><td>26.9</td><td>269</td><td>2.40</td></tr>
-            <tr><td>2025-06</td><td>55,571</td><td>14,417</td><td>25.9</td><td>263</td><td>1.82</td></tr>
-            <tr><td>2025-07</td><td>75,615</td><td>11,629</td><td>15.4</td><td>133</td><td>1.14</td></tr>
-            <tr><td>2025-08</td><td>42,950</td><td>9,450</td><td>22.0</td><td>86</td><td>0.91</td></tr>
-            <tr><td>2025-09</td><td>44,096</td><td>2,839</td><td>6.4</td><td>48</td><td>1.69</td></tr>
-            <tr><td>2025-10</td><td>218,840</td><td>35,470</td><td>16.2</td><td>2,619</td><td>7.38</td></tr>
-            <tr><td>2025-11</td><td>193,747</td><td>13,620</td><td>7.0</td><td>430</td><td>3.16</td></tr>
-            <tr><td>2025-12</td><td>90,070</td><td>13,466</td><td>15.0</td><td>197</td><td>1.46</td></tr>
-            <tr><td>2026-01</td><td>81,627</td><td>10,879</td><td>13.3</td><td>147</td><td>1.35</td></tr>
-            <tr><td>2026-02</td><td>43,517</td><td>5,401</td><td>12.4</td><td>48</td><td>0.89</td></tr>
-            <tr><td>2026-03</td><td>76,614</td><td>7,023</td><td>9.2</td><td>59</td><td>0.84</td></tr>
-            <tr><td>2026-04</td><td>74,861</td><td>5,677</td><td>7.6</td><td>78</td><td>1.37</td></tr>
-            <tr><td>2026-05</td><td>32,891</td><td>4,884</td><td>14.8</td><td>41</td><td>0.84</td></tr>
-            <tr><td>2026-06</td><td>32,606</td><td>3,793</td><td>11.6</td><td>40</td><td>1.05</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p>搜索流量占比呈现较大波动，正常月份在6-27%区间变动，平均约<strong>15%</strong>。值得关注的是，大促期间（2025年10月）搜索转化率达到惊人的<strong>7.38%</strong>，远高于平销的0.8-2.4%，说明大促期间用户购物意图更强，搜索流量精准度也更高。</p>
-
-      <p>进入2026年以来，搜索流量占比持续走低，稳定在7-15%区间，说明免费自然搜索流量占比在下降，店铺流量结构更加依赖付费推广，这可能导致获客成本上升。</p>
-
-      <div class="callout">
-        <p><strong>搜索优化建议：</strong>核心品类（羽绒服、冲锋衣、德训鞋）关键词优化空间仍然较大，建议加强标题相关性优化和评价运营，提升自然搜索排名，稳定免费流量占比。</p>
-      </div>
-    </section>
-
-    <section class="reveal" id="refund">
-      <h2>退款问题分析</h2>
-      <div class="section-summary"><strong>平均退款率高达59.2%，11个月超过50%警戒线，是当前经营中最亟需解决的核心问题。</strong></div>
-      <p>退款率是直接影响店铺利润和权重的关键指标，本分析周期数据令人担忧：</p>
-
-      <figure class="chart-figure">
-        <figcaption>图7：月度退款率趋势</figcaption>
-        <div id="chart-refund" class="chart-container"></div>
-      </figure>
-
-      <div class="callout warning">
-        <h4>⚠️ 严重问题：退款率持续高位</h4>
-        <ul>
-          <li>14个月中<strong>11个月退款率超过50%</strong>，即退款金额超过支付金额的一半</li>
-          <li>2025年11月退款率高达<strong>112.4%</strong>，退款金额超过当期支付金额</li>
-          <li>进入2026年后，退款率持续维持在<strong>52-73%</strong>，没有改善迹象</li>
-          <li>全周期平均退款率达到<strong>59.2%</strong>，接近六成营收被退款吞噬</li>
-        </ul>
-      </div>
-
-      <p>如此高的退款率在电商运营中属于极不正常现象，可能的原因包括：</p>
-      <ul>
-        <li><strong>大促退货集中</strong>：双十一大促产生大量退款在11月集中处理，导致11月数据异常</li>
-        <li><strong>尺码问题</strong>：服装鞋类商品消费者试穿后不合适退货比例较高</li>
-        <li><strong>颜色/版型不符预期</strong>：网购实物与图片期望差异导致退货</li>
-        <li><strong>恶意退款/刷单</strong>：异常高退款率也可能存在非真实交易因素</li>
-        <li><strong>质量问题</strong>：产品品质达不到消费者预期</li>
-      </ul>
-
-      <p>高退款率对店铺经营造成多重伤害：<strong>直接侵蚀利润</strong>（退货运费+包装损耗+人力成本）、<strong>降低店铺权重</strong>影响搜索排名、<strong>拉低DSR评分</strong>影响转化、<strong>增加库存压力</strong>。这是hummel天猫店当前经营中最需要解决的核心问题。</p>
-
-      <div class="callout warning">
-        <p><strong>紧急建议：</strong>立即组织对退款订单原因进行汇总统计，找出Top 3退款原因，针对性解决——如尺码不准则改进尺码表，色差问题则优化商品图片，质量问题则改进供应链品控。</p>
-      </div>
-    </section>
-
-    <section class="reveal" id="top-products">
-      <h2>核心商品分析</h2>
-      <div class="section-summary"><strong>TOP 10单品贡献六成营收，头款爆款驱动模式明确，冲锋衣品类占据绝对统治地位。</strong></div>
-      <p>按累计支付金额排序，全店TOP 10商品如下：</p>
-
-      <div class="top-products">
-        <div class="product-card">
-          <h4>HUMMEL三合一防风男女宽松连帽外套两件套春秋冬夹克</h4>
-          <div class="metric"><span>支付金额</span><strong>¥814,889</strong></div>
-          <div class="metric"><span>支付件数</span><strong>2,036</strong></div>
-        </div>
-        <div class="product-card">
-          <h4>HUMMEL鹅绒内胆三合一外套男女休闲宽松连帽两件套</h4>
-          <div class="metric"><span>支付金额</span><strong>¥652,177</strong></div>
-          <div class="metric"><span>支付件数</span><strong>1,409</strong></div>
-        </div>
-        <div class="product-card">
-          <h4>hummel2026春季新款德训鞋百搭透气运动复古板鞋软底休闲鞋情侣鞋</h4>
-          <div class="metric"><span>支付金额</span><strong>¥452,902</strong></div>
-          <div class="metric"><span>支付件数</span><strong>874</strong></div>
-        </div>
-        <div class="product-card">
-          <h4>hummel2025新款双面百搭高级感保暖毛线针织格子围脖</h4>
-          <div class="metric"><span>支付金额</span><strong>¥185,689</strong></div>
-          <div class="metric"><span>支付件数</span><strong>2,116</strong></div>
-        </div>
-        <div class="product-card">
-          <h4>HUMMEL2025秋季针织百搭男装开衫外套V领简约情侣</h4>
-          <div class="metric"><span>支付金额</span><strong>¥138,917</strong></div>
-          <div class="metric"><span>支付件数</span><strong>419</strong></div>
-        </div>
-        <div class="product-card">
-          <h4>HUMMEL情侣套装</h4>
-          <div class="metric"><span>支付金额</span><strong>¥134,036</strong></div>
-          <div class="metric"><span>支付件数</span><strong>1,371</strong></div>
-        </div>
-        <div class="product-card">
-          <h4>HUMMEL都市商务POLO衫男士夏季冰丝翻领短袖胖子大码通勤无缝半袖</h4>
-          <div class="metric"><span>支付金额</span><strong>¥131,890</strong></div>
-          <div class="metric"><span>支付件数</span><strong>363</strong></div>
-        </div>
-        <div class="product-card">
-          <h4>HUMMEL短款羽绒服男士冬季款纯色立领保暖防寒面包服</h4>
-          <div class="metric"><span>支付金额</span><strong>¥129,796</strong></div>
-          <div class="metric"><span>支付件数</span><strong>332</strong></div>
-        </div>
-        <div class="product-card">
-          <h4>HUMMEL情侣棉服男2025冬款LOGO印花休闲保暖立领外套</h4>
-          <div class="metric"><span>支付金额</span><strong>¥122,151</strong></div>
-          <div class="metric"><span>支付件数</span><strong>338</strong></div>
-        </div>
-        <div class="product-card">
-          <h4>HUMMEL中长款羽绒服男女冬情侣加厚外套过膝鸭绒防风</h4>
-          <div class="metric"><span>支付金额</span><strong>¥78,024</strong></div>
-          <div class="metric"><span>支付件数</span><strong>64</strong></div>
-        </div>
-      </div>
-
-      <p>TOP 10商品合计贡献了<strong>2,839,621元</strong>，占全周期总营收的<strong>60%</strong>，呈现明显的<strong>头部爆款驱动</strong>特征。两款三合一冲锋衣合计贡献超过146万，占TOP 10的一半以上，印证了冲锋衣是品牌王牌品类。</p>
-
-      <p>值得注意的是，一款售价不到百元的针织围脖累计销售超过2,100件，贡献近18.6万营收，周转率远高于大件服装，说明性价比配饰小商品适合走量，能稳定贡献现金流。</p>
-
-      <div class="callout">
-        <p><strong>商品策略启示：</strong>继续聚焦三合一冲锋衣+羽绒服这两大优势品类，加大资源投入打造更多百万级爆款；同时保持丰富的配饰小件商品矩阵，提升店铺周转和现金流。</p>
-      </div>
-    </section>
-
-    <section class="reveal" id="conclusion">
-      <h2>结论与建议</h2>
-      <div class="section-summary"><strong>品牌已经验证了核心品类的市场吸引力，但在运营效率和结构平衡上存在显著改进空间。</strong></div>
-
-      <h3>核心结论</h3>
-      <p>基于14个月生意参谋数据的深度分析，hummel天猫旗舰店经营呈现以下特征：</p>
-
-      <ol>
-        <li><strong>大促依赖严重，平销能力不足</strong>——单月（2025年10月）贡献超过一半营收，平销月营收仅为大促月的5-10%，业绩波动过大不利于团队和供应链稳定。</li>
-        <li><strong>季节性分布极度不均</strong>——秋冬品类贡献超过六成营收，夏季品类表现低迷，淡季存在较大增长空间需要填补。</li>
-        <li><strong>价格定位精准</strong>——300-500元价格带贡献超过56%营收，卡位准确，符合品牌定位和市场需求。</li>
-        <li><strong>仍处于拉新阶段</strong>——平均76%交易来自新买家，说明品牌在天猫用户认知正在建立，但复购运营滞后，用户生命周期价值有待挖掘。</li>
-        <li><strong>退款率问题异常严峻</strong>——平均近60%退款率严重侵蚀利润，这是当前经营中最亟需解决的核心问题。</li>
-        <li><strong>爆款驱动明显</strong>——TOP 10商品贡献六成营收，两款核心冲锋衣爆款占比超30%，策略上应继续聚焦优势品类。</li>
-      </ol>
-
-      <h3>运营建议</h3>
-
-      <div class="callout">
-        <h4>一、优先解决高退款率问题</h4>
-        <p>1. 统计近半年退款订单的原因分类，找出Top 3退款原因；<br>
-        2. 针对尺码问题，优化详情页尺码对照表，增加版型说明；<br>
-        3. 针对色差/材质不符，优化商品图片和描述，提高信息透明度；<br>
-        4. 设定退款率降低目标，每月监控改进效果。</p>
-      </div>
-
-      <div class="callout">
-        <h4>二、优化商品结构，平衡季节性</h4>
-        <p>1. 继续巩固三合一冲锋衣、羽绒服核心优势，稳定爆款投入；<br>
-        2. 加强夏季品类（POLO衫、T恤、皮肤衣）的产品和营销投入，填补淡季缺口；<br>
-        3. 保持配饰小件商品的丰富度，这类商品周转快，可稳定贡献现金流。</p>
-      </div>
-
-      <div class="callout">
-        <h4>三、从单纯拉新向拉新复购并重转型</h4>
-        <p>1. 建立会员体系，鼓励用户复购；<br>
-        2. 通过企业微信/短信对已购用户进行二次触达；<br>
-        3. 针对老客推出专属优惠，提升复购转化率；<br>
-        4. 目标是将老客占比逐步提升至35-40%，降低对新客获取的依赖。</p>
-      </div>
-
-      <div class="callout">
-        <h4>四、提升平销业绩，降低大促依赖</h4>
-        <p>1. 日常保持稳定的直通车/钻展投入，避免流量大起大落；<br>
-        2. 利用品智聚、天天特卖等平台活动提升平销动销；<br>
-        3. 通过店铺会员日、周期性优惠券激活日常购买。</p>
-      </div>
-
-      <div class="callout">
-        <h4>五、强化搜索流量运营</h4>
-        <p>1. 核心品类核心关键词持续优化标题和权重；<br>
-        2. 加强评价管理，鼓励买家秀，提升转化；<br>
-        3. 维持搜索流量占比在合理区间，降低对付费流量的依赖。</p>
-      </div>
-
-      <p>总体来看，hummel品牌在天猫已经成功打造了核心爆款品类，获得了市场验证，但在运营效率（退款率）、用户运营（复购）、结构平衡（季节性）三个方面还有较大提升空间。解决好这些问题，店铺利润率和可持续增长能力将得到显著改善。</p>
-    </section>
-
-    <footer>
-      <div class="sources">
-        <h2>数据来源</h2>
-        <ol>
-          <li id="cite-1">
-            <span class="src-title">hummel天猫旗舰店生意参谋商品月报，2025年5月 - 2026年6月，共14份数据文件。</span>
-            <span class="src-url">用户上传数据</span>
-          </li>
-        </ol>
-      </div>
-    </footer>
+  <div class="decision-panel reveal" id="d1">
+    <h4>决策一：全站推广ROI仅0.48，是否继续投入？</h4>
+    <p>6月全站推广花费&yen;8,766仅产出&yen;4,252，智能场景推广&yen;4,825零产出。当前推广策略严重亏损。</p>
+    <div class="decision-buttons">
+      <button class="decision-btn primary" onclick="showResult('r1a','d1')">立即暂停所有推广，重新规划</button>
+      <button class="decision-btn secondary" onclick="showResult('r1b','d1')">保留全站推广，砍掉智能场景</button>
+      <button class="decision-btn secondary" onclick="showResult('r1c','d1')">维持现状，观望一个月</button>
+    </div>
+    <div class="decision-result" id="r1a"><strong style="color:var(--accent);">推荐方案：立即暂停所有推广</strong><br><br>1. 暂停全站推广和智能场景推广，止损优先<br>2. 预算重新分配到搜索关键词优化（搜索UV价值&yen;3.71）<br>3. 测试淘金币渠道规模化（UV价值&yen;18.10）<br>4. 重新制定推广计划，每周审核ROI，低于1.0立即暂停<br>预计月度节省&yen;13,899推广费用。</div>
+    <div class="decision-result" id="r1b"><strong>折中方案：保留全站推广，砍掉智能场景</strong><br><br>全站推广ROI 0.48虽亏损但至少带来曝光。智能场景&yen;4,825零产出应立即停掉。全站推广需优化人群定向和出价策略，目标ROI提升至1.0以上。</div>
+    <div class="decision-result" id="r1c"><strong style="color:var(--accent);">不推荐：维持现状</strong><br><br>按月净亏损&yen;4,514计算，三个月将亏损&yen;13,542。至少优化创意素材和人群定向后再继续。</div>
   </div>
 
-  <script src="./_shared/js/echarts.min.js"></script>
-  <script src="./assets/charts.js"></script>
-  <script>
-    (function() {
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-          }
-        });
-      }, { threshold: 0.15 });
-      document.querySelectorAll('.reveal').forEach(function(el) {
-        observer.observe(el);
-      });
-    })();
+  <div class="decision-panel reveal" id="d2">
+    <h4>决策二：3款零产出产品如何处理？</h4>
+    <p>工装裤（16访客）、女运动裤（62访客，跳出率65.41%）、POLO衫（48访客）6月均零成交。</p>
+    <div class="decision-buttons">
+      <button class="decision-btn primary" onclick="showResult('r2a','d2')">立即下架，集中资源</button>
+      <button class="decision-btn secondary" onclick="showResult('r2b','d2')">优化详情页后继续测试</button>
+      <button class="decision-btn secondary" onclick="showResult('r2c','d2')">降价清仓，快速回笼</button>
+    </div>
+    <div class="decision-result" id="r2a"><strong style="color:var(--accent);">推荐方案：立即下架</strong><br><br>这三款产品不仅零产出，还稀释了店铺流量，分散消费者注意力。当前仅10款产品，集中资源打造3-5款爆品比广撒网更有效。女运动裤属于女装类目，与Hummel运动男装定位有偏差，建议重新评估品类方向。</div>
+    <div class="decision-result" id="r2b"><strong>保守方案：优化后继续测试</strong><br><br>重点优化女运动裤（跳出率65.41%说明详情页或价格有严重问题）和POLO衫（夏季应季产品但无转化）。给2周时间，若仍无成交则下架。</div>
+    <div class="decision-result" id="r2c"><strong style="color:var(--accent);">不推荐：降价清仓</strong><br><br>当前客单价&yen;421，降价会拉低品牌调性。Hummel定位中高端运动时尚，价格战不利于长期品牌建设。</div>
+  </div>
 
-    (function() {
-      var navLinks = document.querySelectorAll('.site-nav .nav-links a');
-      var sections = [];
-      navLinks.forEach(function(link) {
-        var id = link.getAttribute('href').replace('#', '');
-        var el = document.getElementById(id);
-        if (el) sections.push({ id: id, el: el, link: link });
-      });
+  <div class="decision-panel reveal" id="d3">
+    <h4>决策三：会员体系如何激活？</h4>
+    <p>会员20人访问，0成交。粉丝303人，转化率仅0.99%。老客217人但支付5人。用户留存和复购体系几乎为零。</p>
+    <div class="decision-buttons">
+      <button class="decision-btn primary" onclick="showResult('r3a','d3')">建立会员专属权益体系</button>
+      <button class="decision-btn secondary" onclick="showResult('r3b','d3')">优先做粉丝运营，会员暂缓</button>
+      <button class="decision-btn secondary" onclick="showResult('r3c','d3')">先做产品，用户运营暂缓</button>
+    </div>
+    <div class="decision-result" id="r3a"><strong style="color:var(--accent);">推荐方案：建立会员+粉丝双轨运营</strong><br><br>1. 会员专属折扣（9折），入会即享<br>2. 积分体系：消费1元=1积分，可兑换优惠券<br>3. 粉丝专享：关注店铺领&yen;10无门槛券<br>4. 老客复购优惠：购买后7天推送&yen;20复购券<br>5. 每月会员日（每月8号），专属商品+双倍积分<br>目标：3个月内会员成交占比提升至10%。</div>
+    <div class="decision-result" id="r3b"><strong>折中方案：优先做粉丝运营</strong><br><br>粉丝303人基数远超会员20人，先用简单优惠券激活粉丝，测试转化效果。会员体系等粉丝运营成熟后再搭建。</div>
+    <div class="decision-result" id="r3c"><strong style="color:var(--accent);">不推荐：先做产品</strong><br><br>产品固然重要，但99.1%新客占比意味着店铺没有复购"发动机"。即使产品做好了，每次都需要重新拉新，成本极高。产品优化和用户运营应并行推进。</div>
+  </div>
 
-      var activeId = null;
-      var navH = document.querySelector('.site-nav').offsetHeight;
-      var ticking = false;
+  <div class="decision-panel reveal" id="d4">
+    <h4>决策四：直播和短视频内容是否加大投入？</h4>
+    <p>6月直播间访客仅21人，短视频引导访客10,745人。直播UV价值&yen;2.41，短视频0转化。内容营销（逛逛、超级短视频）零产出。</p>
+    <div class="decision-buttons">
+      <button class="decision-btn primary" onclick="showResult('r4a','d4')">主攻短视频，直播暂缓</button>
+      <button class="decision-btn secondary" onclick="showResult('r4b','d4')">短视频+直播同步推进</button>
+      <button class="decision-btn secondary" onclick="showResult('r4c','d4')">暂不投入内容，专注搜索优化</button>
+    </div>
+    <div class="decision-result" id="r4a"><strong style="color:var(--accent);">推荐方案：主攻短视频</strong><br><br>短视频已贡献10,745访客（占总量40%），但转化率为0，说明内容质量而非数量有问题。优化方向：短视频挂商品链接、增加穿搭展示、加入促销信息。直播可先做"周播"（每周2-3场），测试时段和主播效果。</div>
+    <div class="decision-result" id="r4b"><strong>激进方案：同步推进</strong><br><br>需要投入至少1名主播+1名运营。短视频日更3条，直播每周5场。预计月度人力成本增加&yen;8,000-15,000。适合预算充足的情况。</div>
+    <div class="decision-result" id="r4c"><strong>保守方案：专注搜索优化</strong><br><br>搜索流量UV价值&yen;3.71是当前最优质渠道。但需注意：短视频已是重要的免费流量来源，完全放弃可能损失40%的访客。</div>
+  </div>
 
-      function updateActive() {
-        var scrollY = window.scrollY + navH + 120;
-        var current = sections[0] ? sections[0].id : null;
+  <div class="decision-panel reveal" id="d5">
+    <h4>决策五：产品线扩展方向？</h4>
+    <p>当前仅10款产品，鞋类2款贡献&yen;1,911（占总额29%），裤装类表现分化。是否需要扩展品类或深耕现有品类？</p>
+    <div class="decision-buttons">
+      <button class="decision-btn primary" onclick="showResult('r5a','d5')">深耕鞋类，拓展3-5款新鞋</button>
+      <button class="decision-btn secondary" onclick="showResult('r5b','d5')">均衡发展，各品类各加2-3款</button>
+      <button class="decision-btn secondary" onclick="showResult('r5c','d5')">维持现有10款，先做精</button>
+    </div>
+    <div class="decision-result" id="r5a"><strong style="color:var(--accent);">推荐方案：深耕鞋类</strong><br><br>鞋类转化率3.77%-3.95%，远超裤装和T恤。德训鞋/复古运动鞋是当前热门趋势，Hummel品牌有足球基因。建议新增：复古跑鞋、板鞋、拖鞋等3-5款。鞋类用户更易产生复购（不同配色/款式）。</div>
+    <div class="decision-result" id="r5b"><strong>均衡方案：各品类加2-3款</strong><br><br>需要关注供应链压力。10款到20款需要更强的库存管理和资金周转能力。建议分阶段推进，先鞋类后裤装。</div>
+    <div class="decision-result" id="r5c"><strong>保守方案：先做精现有10款</strong><br><br>当前10款中已有3款零产出，说明产品力本身有待提升。但需注意：10款产品过于单薄，消费者选择空间有限。</div>
+  </div>
 
-        for (var i = sections.length - 1; i >= 0; i--) {
-          if (sections[i].el.offsetTop <= scrollY) {
-            current = sections[i].id;
-            break;
-          }
-        }
+  <div class="section-summary reveal" data-label="一句话总结">以上五个决策点环环相扣，建议优先止血（推广止损+产品瘦身），同步激活用户体系，最后规模扩展——每一步都必须有可量化的目标与严格的执行纪律。</div>
+</section>
 
-        if (current !== activeId) {
-          activeId = current;
-          sections.forEach(function(s) {
-            if (s.id === current) {
-              s.link.classList.add('active');
-            } else {
-              s.link.classList.remove('active');
-            }
-          });
-        }
-        ticking = false;
-      }
+<section>
+  <div class="section-header"><div class="num">Section 06</div><h2>综合诊断：SWOT分析</h2></div>
+  <div class="swot-grid reveal">
+    <div class="swot-cell s"><h4>S 优势</h4><ul><li>品牌调性清晰：运动时尚+足球基因</li><li>客单价提升至&yen;421，中高端定位</li><li>鞋类产品转化率3.77%-3.95%</li><li>站内沟通UV价值&yen;20.02</li><li>搜索流量质量好（UV价值&yen;3.71）</li><li>跳失率从59%改善至45%</li></ul></div>
+    <div class="swot-cell w"><h4>W 劣势</h4><ul><li>访客和收入断崖式下跌</li><li>转化率仅0.60%，远低于行业均值</li><li>新客占比99.1%，几乎零复购</li><li>推广ROI仅0.48，严重亏损</li><li>产品线仅10款，30%零产出</li><li>会员体系形同虚设</li><li>内容营销（直播/短视频/逛逛）近乎空白</li></ul></div>
+    <div class="swot-cell o"><h4>O 机会</h4><ul><li>复古运动鞋/德训鞋市场持续火热</li><li>短视频流量红利（已贡献10,745访客）</li><li>淘金币渠道高ROI待规模化</li><li>直播电商渗透率持续提升</li><li>运动户外品类天猫增速领先</li><li>老客复购空间巨大</li></ul></div>
+    <div class="swot-cell t"><h4>T 威胁</h4><ul><li>竞品（Adidas、Nike、李宁等）投入巨大</li><li>1月高业绩后断崖下跌，品牌势能受损</li><li>天猫流量成本持续上升</li><li>夏季服装品类竞争白热化</li><li>消费者对品牌认知度不足</li></ul></div>
+  </div>
+  <div class="section-summary reveal" data-label="一句话总结">品牌基因优秀但运营基本功薄弱，鞋类品类有明确突破口，但需系统性重建流量、转化、留存三大引擎方能走出困境。</div>
+</section>
 
-      window.addEventListener('scroll', function() {
-        if (!ticking) {
-          requestAnimationFrame(updateActive);
-          ticking = true;
-        }
-      }, { passive: true });
+<section>
+  <div class="section-header"><div class="num">Section 07</div><h2>经营者上任 90 天行动路线图</h2></div>
+  <div class="reveal">
+    <div class="scope-box"><h4>第 1–30 天 · 止血与诊断</h4><ul><li><strong>立即暂停</strong>智能场景推广（月省&yen;4,825），优化全站推广人群定向</li><li><strong>下架</strong>3款零产出产品，集中资源打造爆款</li><li><strong>优化</strong>高跳出率产品详情页（女运动裤65.41%、休闲裤61.94%）</li><li><strong>建立</strong>基础会员权益：入会享9折，关注店铺领&yen;10券</li><li><strong>排查</strong>1月高业绩来源，确认是否为脉冲式促销效果</li></ul></div>
+    <div class="scope-box"><h4>第 31–60 天 · 优化与激活</h4><ul><li><strong>新增</strong>3-5款鞋类产品，深耕核心品类</li><li><strong>优化</strong>短视频内容，挂商品链接+添加促销信息</li><li><strong>启动</strong>周播直播（每周2-3场），测试时段和主播</li><li><strong>推广</strong>淘金币渠道，目标UV价值维持&yen;15以上</li><li><strong>上线</strong>老客复购优惠券，推送购买后7天&yen;20券</li></ul></div>
+    <div class="scope-box"><h4>第 61–90 天 · 增长与复制</h4><ul><li><strong>目标</strong>月支付金额回到&yen;100,000+，转化率提升至1.0%+</li><li><strong>复盘</strong>推广ROI，确保全站推广ROI > 1.5</li><li><strong>搭建</strong>会员积分体系，每月8日会员日</li><li><strong>扩展</strong>产品线至20款，形成鞋类+裤装+T恤矩阵</li><li><strong>测试</strong>站外引流（小红书、抖音），建立品牌认知</li></ul></div>
+  </div>
+  <div class="section-summary reveal" data-label="一句话总结">90天分三步走——止血诊断、优化激活、增长复制——每一步都必须有可量化的目标与严格的执行纪律，切忌同时推进所有事项导致资源分散。</div>
+</section>
 
-      updateActive();
-    })();
-  </script>
+<footer>
+  <div class="sources">
+    <h2>数据来源</h2>
+    <ol>
+      <li><span class="src-title">店铺经营核心月报（2026年1–6月）</span><span class="src-url">User-uploaded document: 店铺经营核心月报_20260701</span></li>
+      <li><span class="src-title">店铺流量来源构成月报（2026年6月）</span><span class="src-url">User-uploaded document: 店铺流量来源构成月报_20260701</span></li>
+      <li><span class="src-title">店铺流量来源构成月报旧版（2026年1–6月）</span><span class="src-url">User-uploaded document: 店铺流量来源构成月报旧_20260701</span></li>
+      <li><span class="src-title">商品流量来源构成月报（2026年6月）</span><span class="src-url">User-uploaded document: 商品流量来源构成月报_20260701</span></li>
+      <li><span class="src-title">商品整体效果月报（2026年5–6月）</span><span class="src-url">User-uploaded document: 商品整体效果月报_20260701</span></li>
+      <li><span class="src-title">商品分人群流量来源日报（2026年6月）</span><span class="src-url">User-uploaded document: 商品分人群流量来源日报_20260701</span></li>
+    </ol>
+  </div>
+</footer>
+
+<script src="./_shared/js/echarts.min.js"></script>
+<script src="assets/charts.js"></script>
+<script>
+function showResult(resultId, panelId) {
+  var panel = document.getElementById(panelId);
+  var results = panel.querySelectorAll('.decision-result');
+  results.forEach(function(r) { r.classList.remove('show'); });
+  var result = document.getElementById(resultId);
+  if (result) {
+    result.classList.add('show');
+    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+(function() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) entry.target.classList.add('is-visible');
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+})();
+</script>
 </body>
 </html>
